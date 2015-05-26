@@ -1,0 +1,201 @@
+﻿@model CMD.ViewModels.MonitorPropertyDataViewModel
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p></p>
+<p></p>
+<div class="row">
+    <div class="col-md-2" id="showsearchdiv">
+        @Html.CheckBox("NeedSearch", new { id = "NeedSearchcbx" })<label>監控項目查詢</label>
+    </div>
+    <div class="col-md-10" id="reviewinfodiv">
+        @if (Model.caneditMonitProperty == true)
+        {
+            <p>目前待覆核的監控項目共:<a href="/MonitorProperty/ReviewIndex">@Model.needReviewCount</a></p>
+        }
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12" id="serachdiv">
+        @using (Html.BeginForm())
+        {
+            <div class="row">
+                <div class="row form-group">
+                    @Html.Label("回報結果", new { Class = "col-md-1 control-label" })
+                    @Html.DropDownListFor(m => m.nowStatus, (SelectList)Model.StatusList, new { Class = "form-control" })
+                </div>
+                <div class="row form-group">
+                    @Html.Label("環境", new { Class = "col-md-1 control-label" })
+                    @Html.DropDownListFor(m => m.nowClass, (SelectList)Model.ClassList, new { Class = "form-control" })
+                </div>
+                <div class="row form-group">
+                    @Html.Label("分類", new { Class = "col-md-1 control-label" })
+                    @Html.DropDownListFor(m => m.nowType, (SelectList)Model.TypeList, new { Class = "form-control", id = "TypeList" })
+                </div>
+                <div class="row form-group">
+                    @Html.Label("系統", new { Class = "col-md-1 control-label" })
+                    @Html.DropDownListFor(m => m.nowSys, (SelectList)Model.SysList, new { Class = "form-control", id = "SysList" })
+                </div>
+                <div class="row form-group">
+                    @Html.Label("負責人", new { Class = "col-md-1 control-label" })
+                    @Html.DropDownListFor(m => m.nowUser, (SelectList)Model.UserList, new { Class = "form-control" })
+                </div>
+                @*<div class="form-group">
+                        @Html.Label("監控項目主旨");
+                        @Html.DropDownList("ClassList", (IEnumerable<SelectListItem>)Model.SubjectList, new { Class = "form-control" });
+                    </div>*@
+                <div class="row form-group">
+                    <input type="submit" class="col-md-offset-1 col-md-12 btn btn-primary" id="submitbtn" value="查詢" />
+                </div>
+            </div>
+
+        }
+    </div>
+</div>
+<hr />
+<h2>監控項目清單</h2>
+<div class="row">
+    <div class="col-md-12">
+        @if (Model.caneditMonitProperty == true)
+        {
+            <input type="button" value="同步" class="btn btn-primary" id="syncbtn" />
+            <a href="/MonitorProperty/Create" class="btn btn-primary">新增監控項目</a>
+        }
+    </div>
+</div>
+<p></p>
+<div class="row">
+    <div class="col-md-12" id="monitordataviewdiv">
+        <table class="table table-bordered" id="monitordataviewtb">
+            <tr class="active">
+                <td id="Synctd">同步參數</td>
+                <td id="Edittd">編輯監控項目</td>
+                <td>HostMonitor</td>
+                <td>監控項目主旨</td>
+                <td>回報資料</td>
+                <td>最後回報時間</td>
+                <td>回報結果</td>
+                <td>環境</td>
+                <td>分類</td>
+                <td>系統別</td>
+            </tr>
+            @if (Model.MonitorData != null)
+            {
+                foreach (var item in Model.MonitorData)
+                {
+                    string TRClass = "active";
+
+                    if (item.回報結果 == "Unknown")
+                    {
+                        TRClass = "warning";
+                    }
+                    else if (item.回報結果 == "Error" || item.回報結果 == "Fatal")
+                    {
+                        TRClass = "danger";
+                    }
+                    else if (item.回報結果 == "Normal")
+                    {
+                        TRClass = "success";
+                    }
+                    else
+                    {
+                        TRClass = "info";
+                    }
+                    <tr class=@TRClass>
+                        @if (Model.caneditMonitProperty == true)
+                        {
+                            <td>@Html.CheckBox("NeedSync", new { id = "NeedSync" + "_" + item.監控項目編號, Class = "checkbox" })</td>
+                            <td><a href="/MonitorProperty/Edit?sno=@item.監控項目編號">編輯</a></td>
+                        }
+                        else
+                        {
+                            <td>無權限</td>
+                            <td>無權限</td>
+                        }
+                        <td>@item.是否由HostMonitor監控</td>
+                        <td><a href="/MonitorProperty/Detail?sno=@item.監控項目編號">@item.監控項目主旨</a></td>
+                        <td><a href="/MonitorProperty/MonitorResultIndex?sno=@item.監控項目編號">@item.回報資料</a></td>
+                        <td>@item.回報時間</td>
+                        <td>@item.回報結果</td>
+                        <td>@item.環境</td>
+                        <td>@item.分類</td>
+                        <td>@item.系統別</td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+@Html.Raw(TempData["QueryMsg"])
+@section monitorpropertyscripts
+{
+    <script>
+        $(function () {
+            $("#serachdiv").hide();
+            $("#NeedSearchcbx").change(function () {
+                if ($("#NeedSearchcbx").prop("checked")) {
+                    $("#serachdiv").show();
+                }
+                else {
+                    $("#serachdiv").hide();
+                }
+            });
+
+            //沒有編輯權限時，隱藏欄位
+            var canedit = '@Model.caneditMonitProperty';
+            if (canedit == 'False') {
+                $('td:nth-child(1)').hide();
+                $('td:nth-child(2)').hide();
+            }
+
+            //當類型選單變化時，連動取得系統別選單
+            $("#TypeList").change(function () {
+                var val = $("#TypeList :selected").val();
+                $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
+                    $("#SysList option").remove();
+                    $.each(data, function (i, opt) {
+                        $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
+                    });
+                });
+            });
+
+            $("#syncbtn").click(function () {
+                var SyncList = "";
+                $('#monitordataviewtb').find('input[type="checkbox"]:checked').each(function () {
+                    //this is the current checkbox
+                    var currentid = this.id;
+                    if (SyncList == "") {
+                        SyncList = SyncList + currentid.split("_")[1];
+                    }
+                    else {
+                        SyncList = SyncList + "," + currentid.split("_")[1];
+                    }
+                });
+
+                if (SyncList != "") {
+                    $.blockUI({
+                        message: '<h1><img src="~/pic/busy.gif" /> 正在同步中，請稍後</h1>'
+                    });
+
+                    $.ajax({
+                        url: "@Url.Content("~/MonitorProperty/Sync")",
+                        type: "POST",
+                        contextType: "text/html; charset=utf-8",
+                        data: { SyncList: SyncList },
+                        success: function (data) {
+                            $.unblockUI();
+                            alert(data);
+                        }
+                    });
+                }
+                else {
+                    alert("請至少選一項目");
+                }
+            });
+        })
+    </script>
+}
+

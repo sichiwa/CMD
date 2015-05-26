@@ -1,0 +1,309 @@
+﻿@model CMD.ViewModels.EditMonitorPropertyDataViewModel
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p></p>
+<p></p>
+
+<div class="container">
+    @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal", id = "editform" }))
+    {
+        <input type="hidden" name="actionname" value="edit" />
+        <div class="col-md-12 table-bordered">
+            <h2>基本設定</h2>
+            <div class="form-group">
+                @Html.Label("是否啟用", new { Class = "control-label col-md-1" })
+                @Html.CheckBox("isenable", true)
+            </div>
+            <div class="form-group">
+                @Html.Label("環境", new { Class = "control-label col-md-1" })
+                @Html.DropDownListFor(m => m.s_class, (SelectList)Model.ClassList, new { Class = "form-control col-md-11", id = "s_class" })
+            </div>
+            <div class="form-group">
+                @Html.Label("分類", new { Class = "control-label col-md-1" })
+                @Html.DropDownListFor(m => m.s_type, (SelectList)Model.TypeList, new { Class = "form-control col-md-11", id = "s_type" })
+            </div>
+            <div class="form-group">
+                @Html.Label("系統", new { Class = "control-label col-md-1" })
+                @Html.DropDownListFor(m => m.s_sys, (SelectList)Model.SysList, new { Class = "form-control col-md-11", id = "s_sys" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目編號", new { Class = "control-label col-md-1" })
+                @Html.TextBoxFor(m => m.s_no, "", new { id = "s_no", Class = "form-control col-md-11", maxlength = "10" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目主旨", new { Class = "control-label col-md-1" })
+                @Html.TextBoxFor(m => m.s_subject, "", new { id = "s_subject", Class = "form-control col-md-11", maxlength = "100", style = "max-width: none;width:80%" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目內容", new { Class = "control-label col-md-1" })
+                @Html.TextAreaFor(m => m.s_content, new { id = "s_content", Class = "form-control col-md-11", rows = "5", maxlength = "200", style = "max-width: none;width:80%" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目頻率(秒)", new { Class = "control-label col-md-1" })
+                @Html.TextBoxFor(m => m.s_frequency,"", new { id = "s_frequency", Class = "form-control col-md-11" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目逾時容忍時間(秒)", new { Class = "control-label col-md-1" })
+                @Html.TextBoxFor(m => m.s_timeout, "", new { id = "s_timeout", Class = "form-control col-md-11" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目位置", new { Class = "control-label col-md-1" })
+                @Html.TextBoxFor(m => m.s_position, "", new { id = "s_position", Class = "form-control col-md-11" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目參數接收窗口", new { Class = "control-label col-md-1" })
+                @Html.TextBoxFor(m => m.params_host, "", new { id = "params_host", Class = "form-control col-md-11" })
+            </div>
+            <div class="form-group">
+                @Html.Label("監控項目負責人(以|分隔)", new { Class = "control-label col-md-1" })
+                @Html.TextBoxFor(m => m.sysadmin, "", new { id = "sysadmin", Class = "form-control col-md-11" })
+            </div>
+            <hr />
+            <h2>通知設定</h2>
+            <div class="form-group">
+                @Html.Label("郵件主機設定", new { Class = "control-label col-md-1" })
+                @Html.DropDownListFor(m => m.MailServerProfile, (SelectList)Model.MailServerProfileList, new { Class = "form-control col-md-11", id = "MailServerProfile" })
+            </div>
+            <div class="form-group">
+                @Html.Label("簡訊主機設定", new { Class = "control-label col-md-1" })
+                @Html.DropDownListFor(m => m.TextMessageProfile, (SelectList)Model.TextMessageProfileList, new { Class = "form-control col-md-11", id = "TextMessageProfile" })
+            </div>
+            <hr />
+            <div>
+                <div class="form-group">
+                    <table class="col-md-12 table">
+                        <tr>
+                            <td>動作/情形</td>
+                            <td>發生Warn時</td>
+                            <td>發生Error時</td>
+                            <td>發生Fatal時</td>
+                        </tr>
+                        <tr>
+                            <td class="a">@Html.Label("是否需要Email通知", new { Class = "control-label" })</td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.w_sendmail)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.e_sendmail)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.f_sendmail)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label("是否需要簡訊通知", new { Class = "control-label" })</td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.w_sendmessage)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.e_sendmessage)
+                            </td>
+                            <td>
+                                @Html.CheckBoxFor(m => m.f_sendmessage)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label("通知群組", new { Class = "control-label" })</td>
+                            <td>@Html.DropDownListFor(m => m.w_notify, (SelectList)Model.WarnNotifyGroupList, new { Class = "form-control", id = "w_notify" })</td>
+                            <td>@Html.DropDownListFor(m => m.e_notify, (SelectList)Model.ErrorNotifyGroupList, new { Class = "form-control", id = "e_notify" })</td>
+                            <td>@Html.DropDownListFor(m => m.f_notify, (SelectList)Model.FatalNotifyGroupList, new { Class = "form-control", id = "f_notify" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label("Email通知次數上限", new { Class = "control-label" })</td>
+                            <td>@Html.TextBoxFor(m => m.w_mail_notify_limit, "", new { id = "w_mail_notify_limit", Class = "form-control", Value = "0" })</td>
+                            <td>@Html.TextBoxFor(m => m.e_mail_notify_limit, "", new { id = "e_mail_notify_limit", Class = "form-control", Value = "3" })</td>
+                            <td>@Html.TextBoxFor(m => m.f_mail_notify_limit, "", new { id = "f_mail_notify_limit", Class = "form-control", Value = "3" })</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label("簡訊通知次數上限", new { Class = "control-label" })</td>
+                            <td>@Html.TextBoxFor(m => m.w_message_notify_limit, "", new { id = "w_message_notify_limit", Class = "form-control", Value = "0" })</td>
+                            <td>@Html.TextBoxFor(m => m.e_message_notify_limit, "", new { id = "e_message_notify_limit", Class = "form-control", Value = "3" })</td>
+                            <td>@Html.TextBoxFor(m => m.f_message_notify_limit, "", new { id = "f_message_notify_limit", Class = "form-control", Value = "3" })</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <hr />
+            <h2>檢測工具參數</h2>
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.Label("覆核後同步至檢測工具", new { Class = "control-label col-md-2" })
+                    @Html.CheckBox("issync")
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.TextArea("params", new { id = "params", rows = "30", cols = "60", Class = "form-control", style = "max-width: none" })
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <input type="submit" class="btn btn-primary col-md-7" id="submitbtn" value="修改" />
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@Html.Raw(TempData["EditMsg"])
+
+@section editmonitorpropertyscripts
+{
+    <script>
+    $(function () {
+            if ('@TempData["NotAllowEdit"]' == "Y") {
+                $("input").attr('disabled', 'disabled');
+                $("select").attr('disabled', 'disabled');
+                $("textarea").attr('disabled', 'disabled');
+            }
+
+        $("#s_class").attr('disabled', 'disabled');
+        $("#s_type").attr('disabled', 'disabled');
+        $("#s_sys").attr('disabled', 'disabled');
+        $("#s_no").attr('disabled', 'disabled');
+
+            @*//當類型選單變化時，連動取得系統別選單
+            $("#s_type").change(function () {
+                var val = $("#s_type :selected").val();
+                $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
+                $("#s_sys option").remove();
+                $.each(data, function (i, opt) {
+                    $("<option></option>").val(opt.id).text(opt.value).appendTo($("#s_sys"));
+                });
+            })
+        });*@
+
+        jQuery.validator.setDefaults({
+            debug: false,
+            success: "valid"
+        });
+        var form = $("#editform");
+        form.validate({
+            errorPlacement: function (label, element) {
+                label.addClass('text-danger');
+                label.insertAfter(element);
+            }
+        }
+        );
+
+        $("#s_subject").rules("add", {
+            required: true,
+            messages: {
+                required: "此欄位為必填欄位",
+            }
+        });
+
+        $("#s_content").rules("add", {
+            required: true,
+            messages: {
+                required: "此欄位為必填欄位",
+            }
+        });
+
+        $("#sysadmin").rules("add", {
+            required: true,
+            messages: {
+                required: "此欄位為必填欄位",
+            }
+        });
+
+        $("#s_no").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#s_frequency").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#s_timeout").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#w_mail_notify_limit").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#e_mail_notify_limit").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#f_mail_notify_limit").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#w_message_notify_limit").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#e_message_notify_limit").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#f_message_notify_limit").rules("add", {
+            required: true,
+            digits: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                digits: "請輸入數字"
+            }
+        });
+
+        $("#submitbtn").click(function () {
+            if (form.valid() == true) {
+                form.submit();
+            }
+            else {
+                alert("資料輸入錯誤");
+            }
+
+        });
+
+    })
+    </script>
+}
+

@@ -1,0 +1,110 @@
+﻿@model CMD.v_MonitorProperty_Detail
+
+@{
+    ViewBag.Title = "Detail";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p></p>
+<p></p>
+<div class="container">
+    <div class="col-md-12 table-bordered">
+        <h2>基本設定</h2>
+        <div>
+            @Html.LabelFor(m => m.環境, new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.環境)
+            @Html.LabelFor(m => m.分類, new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.分類)
+            @Html.LabelFor(m => m.系統別, new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.系統別)
+            <br />
+            @Html.Label("監控項目主旨", new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.s_subject)
+            <br />
+            @Html.Label("監控項目內容", new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.s_content)
+            <br />
+            @Html.Label("監控頻率(秒)", new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.s_frequency.ToString())
+            <br />
+            @Html.Label("逾時容忍值(秒)", new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.s_timeout.ToString())
+            <br />
+            @Html.Label("監控項目位置", new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.s_position)
+            <br />
+            @Html.Label("檢測工具同步窗口", new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.params_host)
+            <br />
+            @Html.Label("系統管理人員", new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.sysadmin)
+        </div>
+        <hr />
+        <h2>通知設定</h2>
+        <div>
+            @Html.LabelFor(m => m.郵件設定檔名稱, new { Class = "label label-default" }):
+            @Html.LabelForModel(Model.郵件設定檔名稱)
+            <br />
+            @Html.LabelFor(m => m.簡訊設定檔名稱, new { Class = "label label-default" }):
+            @Html.LabelForModel(Model.簡訊設定檔名稱)
+            <hr />
+            <h4>Warn通知設定</h4>
+            @Html.Label("是否啟用郵件通知", new { Class = "label label-warning" }):
+            @Html.LabelForModel(Model.w_sendmail.ToString())
+            <br />
+            @Html.Label("是否啟用簡訊通知", new { Class = "label label-warning" }):
+            @Html.LabelForModel(Model.w_sendmessage.ToString())
+            <br />
+            @Html.LabelFor(m => m.Warn通知群組, new { Class = "label label-warning" }):
+            @Html.LabelForModel(Model.Warn通知群組)
+            <br />
+            @Html.Label("郵件通知上限", new { Class = "label label-warning" }):
+            @Html.LabelForModel(Model.w_mail_notify_limit.ToString())
+            <br />
+            @Html.Label("簡訊通知上限", new { Class = "label label-warning" }):
+            @Html.LabelForModel(Model.w_message_notify_limit.ToString())
+            <hr />
+            <h4>Error通知設定</h4>
+            @Html.Label("是否啟用郵件通知", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.e_sendmail.ToString())
+            <br />
+            @Html.Label("是否啟用簡訊通知", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.e_sendmessage.ToString())
+            <br />
+            @Html.LabelFor(m => m.Error通知群組, new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.Error通知群組)
+            <br />
+            @Html.Label("郵件通知上限", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.e_mail_notify_limit.ToString())
+            <br />
+            @Html.Label("簡訊通知上限", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.e_message_notify_limit.ToString())
+            <hr />
+            <h4>Fatal通知設定</h4>
+            @Html.Label("是否啟用郵件通知", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.f_sendmail.ToString())
+            <br />
+            @Html.Label("是否啟用簡訊通知", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.f_sendmessage.ToString())
+            <br />
+            @Html.LabelFor(m => m.Fatal通知群組, new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.Fatal通知群組)
+            <br />
+            @Html.Label("郵件通知上限", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.f_mail_notify_limit.ToString())
+            <br />
+            @Html.Label("簡訊通知上限", new { Class = "label label-danger" }):
+            @Html.LabelForModel(Model.f_message_notify_limit.ToString())
+        </div>
+    </div>
+    <div class="col-md-12 table-bordered">
+        <h2>檢測工具參數</h2>
+        <div>
+            @Html.LabelForModel(Model.MonitorToolParams)
+        </div>
+    </div>
+</div>
+
+@Html.Raw(TempData["GetDetailMsg"])
+
+
+

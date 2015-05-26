@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a537bab99789465cbda7708b4f1eccb2" Name="Diagram1">
+        <EntityTypeShape EntityType="CMSModel.ALL_LOG" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.ERROR_LOG" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.FATAL_LOG" Width="1.5" PointX="5.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.WARN_LOG" Width="1.5" PointX="7.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.ACK_LOG" Width="1.5" PointX="16" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.ACK_REASON" Width="1.5" PointX="13.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.ACK_TYPE" Width="1.5" PointX="5.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.ClassList" Width="1.5" PointX="7.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.EmailList" Width="1.5" PointX="3" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.Funcs" Width="1.5" PointX="0.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.MailServerProfile" Width="1.5" PointX="2.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.MonitorParams" Width="1.5" PointX="16" PointY="14.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.MonitorProperty" Width="1.5" PointX="13.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.NotifyGroup" Width="1.5" PointX="3.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.NotifyList" Width="1.5" PointX="6" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.PhoneList" Width="1.5" PointX="3" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.RoleAuthorityList" Width="1.5" PointX="9.75" PointY="14.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.RoleFuncMapping" Width="1.5" PointX="15.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.Roles" Width="1.5" PointX="16.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.SHOW_LOG" Width="1.5" PointX="16" PointY="17.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.StatusList" Width="1.5" PointX="4.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.SYSTEM_LOG" Width="1.5" PointX="17.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TextMessageProfile" Width="1.5" PointX="6.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpClassList" Width="1.5" PointX="18.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpEmailList" Width="1.5" PointX="11" PointY="3.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpFuncs" Width="1.5" PointX="18.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpMailServerProfile" Width="1.5" PointX="8.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpNotifyGroup" Width="1.5" PointX="11.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpNotifyList" Width="1.5" PointX="14" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpPhoneList" Width="1.5" PointX="11" PointY="10.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpRoleAuthorityList" Width="1.5" PointX="18.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpRoleFuncMapping" Width="1.5" PointX="18.75" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpRoles" Width="1.5" PointX="19.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpStatusList" Width="1.5" PointX="0.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpTextMessageProfile" Width="1.5" PointX="2.75" PointY="20.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpUsers" Width="1.5" PointX="8.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TypeList" Width="1.5" PointX="20.75" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.Users" Width="1.5" PointX="0.75" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.ACK_MAPPING" Width="1.5" PointX="20.75" PointY="8.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.SysList" Width="1.5" PointX="20.75" PointY="11.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.TmpSysList" Width="1.5" PointX="20.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Error_Fatal_Result" Width="1.5" PointX="20.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Error_Fatal_Result_Detail" Width="1.5" PointX="4.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Error_Fatal_Result_For_Search" Width="1.5" PointX="21.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_ACK_Data" Width="1.5" PointX="12.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_ACKREASONList" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_ACKTYPEList" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_btn_IdInfo_Result" Width="1.5" PointX="9.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_ClassList" Width="1.5" PointX="22.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_MailServerProfileData" Width="1.5" PointX="22.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_MailServerProfileList" Width="1.5" PointX="22.75" PointY="10.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Monitor_All_Reult_History" Width="1.5" PointX="22.75" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Monitor_Data" Width="1.5" PointX="14.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Monitor_Error_Fatal_Result_History" Width="1.5" PointX="22.75" PointY="16.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Monitor_Reult_History" Width="1.5" PointX="16.75" PointY="22.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Monitorproperty_View_Detail" Width="1.5" PointX="22.75" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_NotifyGroupData" Width="1.5" PointX="23.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_NotifyGroupList" Width="1.5" PointX="6.75" PointY="23.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_ReportSourceData" Width="1.5" PointX="0.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Status_Change_Result" Width="1.5" PointX="24.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_Status_Change_Result_Detail" Width="1.5" PointX="24.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_SubjectList" Width="1.5" PointX="24.75" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_SysList" Width="1.5" PointX="24.75" PointY="18.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_TextMessageProfileData" Width="1.5" PointX="20.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_TextMessageProfileList" Width="1.5" PointX="24.75" PointY="21.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_TypeList" Width="1.5" PointX="22.75" PointY="24.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CMSModel.v_UserList" Width="1.5" PointX="24.75" PointY="24.75" IsExpanded="true" />
+        <AssociationConnector Association="CMSModel.FK_ACK_LOG_MonitorProperty" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_EmailList_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_MonitorPrams_MonitorProperty" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_SHOW_LOG_MonitorProperty" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_NotifyList_NotifyGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_NotifyList_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_PhoneList_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_TmpEmailList_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_TmpNotifyList_NotifyGroup" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_TmpNotifyList_Users" ManuallyRouted="false" />
+        <AssociationConnector Association="CMSModel.FK_TmpPhoneList_Users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="CMSModel.sysdiagrams" Width="1.5" PointX="26.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CMSModel.v_StatusList" Width="1.5" PointX="7.375" PointY="26.75" />
+        <EntityTypeShape EntityType="CMSModel.v_MonitorProperty_Detail" Width="1.5" PointX="17.375" PointY="25.75" />
+        <EntityTypeShape EntityType="CMSModel.TmpMonitorProperty" Width="1.5" PointX="9.375" PointY="23.75" />
+        <EntityTypeShape EntityType="CMSModel.v_TmpMonitorproperty_View_Detail" Width="1.5" PointX="27.375" PointY="3.75" />
+        <EntityTypeShape EntityType="CMSModel.v_TmpMonitorProperty_Detail" Width="1.5" PointX="27.375" PointY="8.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

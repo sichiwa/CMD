@@ -1,0 +1,89 @@
+﻿@model CMD.Models.LoginInfo
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="X-UA-Compatible" content="IE=EDGE">
+    <title>中央監控系統-登入</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center text-info">中央監控系統</h1>
+    </div>
+    <hr />
+
+    @if (TempData["LoginMsg"] != null)
+    {
+        <script type="text/javascript">
+            var message = "@TempData["LoginMsg"]";
+            alert(message);
+        </script>
+    }
+    <div class="container">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { @class = "form-horizontal" }))
+        {
+            <div class="row form-group">
+                @Html.LabelFor(m =>Model.UseCertLogin, new { @class = "control-label col-md-2 col-md-offset-3" })
+                @Html.CheckBox("UseCertLogin", new { id = "UseCertLogin" })
+            </div>
+            <div class="row form-group">
+                @Html.LabelFor(m => Model.UserID, new { @class = "control-label col-md-1 col-md-offset-4" })
+                @Html.TextBoxFor(m => Model.UserID, new { @class = "form-control", @name = "UserName", @placeholder = "請輸入網域帳號(ex:TAS000)" })
+                @Html.ValidationMessageFor(m => Model.UserID, "", new { @class = "text-danger" })
+
+            </div>
+            <div class="row form-group">
+                @Html.LabelFor(m => Model.Pwd, new { @class = "control-label col-md-1 col-md-offset-4" })
+                @Html.TextBoxFor(m => Model.Pwd, new { @type = "password", @class = "form-control", @name = "Pwd", @placeholder = "請輸入網域密碼" })
+                @Html.ValidationMessageFor(m => Model.Pwd, "", new { @class = "text-danger" })
+            </div>
+            <div class="row form-group" id="CertPwddiv">
+                @Html.Label("員工憑證密碼", new { @class = "control-label col-md-1 col-md-offset-4" })
+                <input type="password" class="form-control" name="CertPwd" id="CertPwd" placeholder="請輸入員工憑證密碼" />
+            </div>
+            <div class="row form-group">
+                <input type="hidden" name="Plaintext" id="Plaintext" />
+                <input type="hidden" name="SignData" id="SignData" />
+                <input type="submit" class="btn btn-primary col-md-offset-5 col-md-3" id="submitbtn" value="登入" />
+            </div>
+        }
+    </div>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/respond.min.js"></script>
+    <script src="~/Scripts/CertLogin-min.js"></script>
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#CertPwddiv").hide();
+            $("input[name='UseCertLogin']").checked = false;
+            $("input[name='UseCertLogin']").change(function () {
+                if ($("input[name='UseCertLogin']").prop("checked")) {
+                    $("#CertPwddiv").show();
+                }
+                else {
+                    $("#CertPwddiv").hide();
+                }
+            });
+
+            $("#submitbtn").click(function () {
+                var UseCertLogin = $("input[name='UseCertLogin']").prop("checked");
+                //alert(UseCertLogin);
+                if (UseCertLogin == true) {
+                    CertLogin();
+                }
+            });
+        })
+    </script>
+
+</body>
+</html>

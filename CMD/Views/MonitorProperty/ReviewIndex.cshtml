@@ -1,0 +1,56 @@
+﻿@model  IEnumerable<CMD.v_TmpMonitorproperty_View_Detail>
+
+@{
+    ViewBag.Title = "ReviewIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<p></p>
+<p></p>
+<div class="container">
+    <div class="col-md-12">
+        <table class="table table-bordered">
+            <tr class="active">
+                <td>類型</td>
+                <td>監控項目編號</td>
+                <td>監控項目主旨</td>
+                <td>監控項目內容</td>
+                <td>環境</td>
+                <td>分類</td>
+                <td>系統別</td>
+                <td>修改人員</td>
+                <td>覆核</td>
+            </tr>
+            @if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    string TRClass = "";
+                    
+                    if (item.類型=="create")
+                    {
+                        TRClass = "success";
+                    }
+                    else if (item.類型 == "edit")
+                    {
+                        TRClass = "info";
+                    }
+                    
+                    <tr class=@TRClass>
+                        <td>@item.類型</td>
+                        <td>@item.監控項目編號</td>
+                        <td>@item.監控項目主旨</td>
+                        <td>@item.監控項目內容</td>
+                        <td>@item.環境</td>
+                        <td>@item.分類</td>
+                        <td>@item.系統別</td>
+                        <td>@item.修改人員</td>
+                        <td><a href="/MonitorProperty/Review?sno=@item.監控項目編號">覆核</a></td>
+                    </tr>
+                }
+            }
+        </table>
+    </div>
+</div>
+
+@Html.Raw(TempData["GetReviewListMsg"])
+@Html.Raw(TempData["ReviewMsg"])

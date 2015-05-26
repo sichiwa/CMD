@@ -1,0 +1,206 @@
+﻿@model CMD.ViewModels.MonitorResultHistory
+@{
+    ViewBag.Title = "MonitorResultIndex";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<p></p>
+<p></p>
+
+<div class="row">
+    <div class="col-md-12" id="showsearchdiv">
+        @Html.CheckBox("NeedSearch", new { id = "NeedSearchcbx" })<label>回報歷史資料查詢</label>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-12" id="serachdiv">
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "queryform" }))
+        {
+            <div class="row form-group">
+                @Html.Label("回報結果", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.nowStatus, (SelectList)Model.StatusList, new { Class = "form-control" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("環境", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.nowClass, (SelectList)Model.ClassList, new { Class = "form-control", id = "ClassList" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("分類", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.nowType, (SelectList)Model.TypeList, new { Class = "form-control", id = "TypeList" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("系統", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.nowSys, (SelectList)Model.SysList, new { Class = "form-control", id = "SysList" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("監控項目主旨", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.sno, (SelectList)Model.SubjectList, new { Class = "form-control", id = "SubjectList" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("回報時間(開始)", new { Class = "col-md-1 control-label" })
+                @Html.TextBox("STime", "", new { Class = "form-control date-picker" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("回報時間(結束)", new { Class = "col-md-1 control-label" })
+                @Html.TextBox("ETime", "", new { Class = "form-control date-picker" })
+            </div>
+            <div class="row form-group">
+                <input type="submit" class="col-md-offset-1 col-md-12 btn btn-primary" id="submitbtn" value="查詢" />
+            </div>
+        }
+    </div>
+</div>
+<hr>
+<h2>監控項目資料</h2>
+<div class="row">
+    <div class="col-md-12" id="reviewinfodiv">
+        @Html.Label("環境"):
+        @Html.LabelForModel(Model.環境)
+    </div>
+    <div class="col-md-12" id="reviewinfodiv">
+        @Html.Label("分類"):
+        @Html.LabelForModel(Model.分類)
+    </div>
+    <div class="col-md-12" id="reviewinfodiv">
+        @Html.Label("系統別"):
+        @Html.LabelForModel(Model.系統別)
+    </div>
+    <div class="col-md-12" id="reviewinfodiv">
+        @Html.Label("監控項目主旨"):
+        @Html.LabelForModel(Model.監控項目主旨)
+    </div>
+</div>
+<hr>
+<h2>監控項目歷史回報資料</h2>
+<div class="row">
+    <div class="col-md-12" id="monitordataviewdiv">
+        <table class="table table-bordered" id="monitordataviewtb">
+            <tr class="active">
+                <td>回報時間</td>
+                <td>回報結果</td>
+                <td>回報內容</td>
+            </tr>
+
+            @foreach (var item in Model.AckData)
+            {
+                string TRClass = "active";
+
+                if (item.回報結果 == "Unknown")
+                {
+                    TRClass = "warning";
+                }
+                else if (item.回報結果 == "Error" || item.回報結果 == "Fatal")
+                {
+                    TRClass = "danger";
+                }
+                else if (item.回報結果 == "Normal")
+                {
+                    TRClass = "success";
+                }
+                else
+                {
+                    TRClass = "info";
+                }
+                <tr class=@TRClass>
+                    <td>@item.回報時間</td>
+                    <td>@item.回報結果</td>
+                    <td>@item.回報內容</td>
+                </tr>
+            }
+        </table>
+
+        @Html.PagedListPager(Model.AckData, Page => Url.Action("MonitorResultIndex", new { sno=Model.sno, Page }))
+    </div>
+</div>
+@Html.Raw(TempData["GetMonitorResultMsg"])
+@section monitorresulthistoryscripts
+{
+    <script>
+        $(function () {
+            $("#serachdiv").hide();
+            $("#NeedSearchcbx").change(function () {
+                if ($("#NeedSearchcbx").prop("checked")) {
+                    $("#serachdiv").show();
+                }
+                else {
+                    $("#serachdiv").hide();
+                }
+            });
+        })
+
+        jQuery.validator.setDefaults({
+            debug: false,
+            success: "valid"
+        });
+        var form = $("#queryform");
+        form.validate({
+            errorPlacement: function (label, element) {
+                label.addClass('text-danger');
+                label.insertAfter(element);
+            }
+        });
+
+        $(".date-picker").rules("add", {
+            required: true,
+            date: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                date: "請輸入正確日期格式(yyyy-MM-dd)"
+            }
+        });
+
+        var today = new Date();
+        var daylastMonth = new Date(new Date(today).setMonth(today.getMonth() - 1));
+
+        $(".date-picker").datepicker({
+            changeMonth: true,
+            changYear: true,
+            dateFormat: "yy-mm-dd",
+            onSelect: function (startText, endText) {
+                startText = $("#STime").val();
+                endText = $("#ETime").val();
+
+                if (startText > endText) {
+                    alert("起始日期不能大於結束日期");
+                }
+            }
+        });
+
+        $("#STime").datepicker("setDate", daylastMonth)
+                   .on("change", function () {
+                        $("#STime").valid();
+                    });
+       
+
+        $("#ETime").datepicker("setDate", new Date())
+                   .on("change", function () {
+                       $("#ETime").valid();
+                   });
+
+        //當類型選單變化時，連動取得系統別選單
+        $("#TypeList").change(function () {
+            var val = $("#TypeList :selected").val();
+            $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
+                $("#SysList option").remove();
+                $.each(data, function (i, opt) {
+                    $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
+                });
+            });
+        });
+
+        //當系統別選單變化時，連動取得監控項目主旨選單
+        $("#SysList").change(function () {
+            var nowClass = $("#ClassList :selected").val();
+            var nowType = $("#TypeList :selected").val();
+            var nowSys = $("#SysList :selected").val();
+            $.getJSON("@Url.Content("~/MonitorProperty/getSubjectList")", 'nowClass=' + nowClass + '&nowType=' + nowType + '&nowSys=' + nowSys, function (data) {
+                $("#SubjectList option").remove();
+                $.each(data, function (i, opt) {
+                    $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SubjectList"));
+                });
+            });
+        });
+
+    </script>
+}
