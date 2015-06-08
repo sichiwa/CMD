@@ -8,6 +8,7 @@ namespace CMD.ViewModels
 {
     public class AckDataViewModel
     {
+        public bool caneditMonitProperty { get; set; }
         public string nowClass { get; set; }
         public string nowType { get; set; }
         public string nowSys { get; set; }

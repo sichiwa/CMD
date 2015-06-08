@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Linq.Expressions;
 using System.Text;
+using System.Data.Entity;
 using CMD.Models;
 using CMD.SystemClass;
 using CMD.ViewModels;
@@ -31,22 +32,6 @@ namespace CMD.Controllers
             //共用涵式用
             SF.ConnStr = Configer.C_DBConnstring;
             SF.op_name = op_name;
-
-
-            //if (sclass == null || sclass == "")
-            //{
-            //    sclass = "-1";
-            //}
-
-            //if (stype == null || stype == "")
-            //{
-            //    stype = "-1";
-            //}
-
-            //if (sys == null || sys == "")
-            //{
-            //    sys = "-1";
-            //}
 
             //初始化回傳物件
             AckDataViewModel MV = getAckData("-1", "-1", "-1");
@@ -97,41 +82,138 @@ namespace CMD.Controllers
             }
         }
 
-        //public string Ack(string AckList)
-        //{
-        //    //初始化系統參數
-        //    Configer.Init();
+        [HttpPost]
+        public string Ack(string AckList,string AckType,string AckReason)
+        {
+            //初始化系統參數
+            Configer.Init();
 
-        //    //共用涵式用
-        //    SF.ConnStr = Configer.C_DBConnstring;
-        //    SF.op_name = op_name;
+            //共用涵式用
+            SF.ConnStr = Configer.C_DBConnstring;
+            SF.op_name = op_name;
 
-        //    string op_action = null;
-        //    DateTime op_stime = default(DateTime);
-        //    DateTime op_etime = default(DateTime);
-        //    int op_a_count = 0;
-        //    int op_s_count = 0;
-        //    int op_f_count = 0;
-        //    string op_msg = string.Empty;
-        //    bool op_result = false;
+            string op_action = null;
+            DateTime op_stime = default(DateTime);
+            DateTime op_etime = default(DateTime);
+            int op_a_count = 0;
+            int op_s_count = 0;
+            int op_f_count = 0;
+            string op_msg = string.Empty;
+            bool op_result = false;
 
-        //    string MailServer = Configer.MailServer;
-        //    int MailServerPort = Configer.MailServerPort;
-        //    string MailSender = Configer.MailSender;
-        //    List<string> MailReceiver = Configer.MailReceiver;
+            string MailServer = Configer.MailServer;
+            int MailServerPort = Configer.MailServerPort;
+            string MailSender = Configer.MailSender;
+            List<string> MailReceiver = Configer.MailReceiver;
 
-        //    op_action = "監控項目復歸作業";
+            op_action = "監控項目復歸作業";
 
-        //    try
-        //    {
+            string Result = "success";
 
-        //    }
-        //    catch (Exception ex)
-        //    {
-                
-        //        throw;
-        //    }
-        //}
+            try
+            {
+                op_stime = DateTime.Now;
+                if (AckList == "" || AckList == null)
+                {
+                    op_etime = DateTime.Now;
+                    op_msg = "輸入資料錯誤，未選擇復歸項目";
+                    //寫入文字檔Log
+                    SF.logandshowInfo("[" + op_name + "]執行[" + op_action + "]失敗,錯誤訊息[" + op_msg + "]", log_Info);
+                    Result = "請至少勾選一項目";
+
+                    return Result;
+                }
+                else
+                {
+                    char[] sp = { ',' };
+                    List<string> ackidlist = StringProcessor.SplitString2Array(AckList, sp);
+
+                    op_a_count = ackidlist.Count;
+
+                    foreach (string item in ackidlist)
+                    {
+                        using (CMSEntities CMS = new CMSEntities())
+                        {
+                            int aid = Convert.ToInt32(item);
+                            string ackaccount = Session["UserID"].ToString();
+
+                            var AK = CMS.ACK_LOG
+                               .Where(b => b.id == aid).First();
+
+                            AK.ack_account = ackaccount;
+                            AK.ack_time = DateTime.Now;
+                            AK.ack_type = AckType;
+                            AK.ack_reason = AckReason;
+                            AK.is_ack = true;
+
+                            CMS.Entry(AK).State = EntityState.Modified;
+                            CMS.SaveChanges();
+
+                            op_s_count +=1 ;
+                            op_msg = "[" + op_name + "]執行[" + op_action + "]成功,復歸資料id:[" + aid.ToString() + "]";
+                           
+                            //寫入文字檔Log
+                            SF.logandshowInfo(op_msg, log_Info);
+                        }
+                    }
+                    op_etime = DateTime.Now;
+
+                    op_msg = "需復歸資料共:[" + op_a_count.ToString() + " ]筆;" + "成功:[" + op_s_count.ToString() + "];" + "失敗:[" + (op_a_count - op_s_count).ToString() + "];";
+
+                    if (op_s_count == op_a_count)
+                    {
+                        op_result = true;
+                        SF.logandshowInfo(op_msg, log_Info);
+
+                        return Result;
+                    }
+                    else
+                    {
+                        op_etime = DateTime.Now;
+                        op_msg = "本次共復歸成功[" + op_s_count.ToString() + "]筆，失敗[" + (op_a_count - op_s_count).ToString() + "]筆";
+                        SF.logandshowInfo("[" + op_name + "]執行[" + op_action + "]失敗," + op_msg, log_Info);
+
+                        Result = op_msg;
+
+                        return Result;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                op_f_count += 1;
+                string MailSubject = null;
+                StringBuilder MailBody = null;
+              
+                //TempData["QueryMsg"] = "<script>alert('取得待復歸資料異常，請洽系統管理人員')</script>";
+                op_msg = "[" + op_name + "]執行[" + op_action + "]失敗,錯誤訊息[" + ex.ToString() + "]";
+                SF.logandshowInfo("[" + op_name + "]執行[" + op_action + "]失敗,本次查詢發生異常,請查詢Debug Log得到詳細資訊", log_Info);
+                SF.logandshowInfo(op_msg, log_Err);
+
+                //通知系統管理人員
+                MailSubject = "[異常]中控處理系統-" + op_name + "模組執行[" + op_action + "]失敗";
+                MailBody.Append("<table>");
+                MailBody.Append("<tr><td>");
+                MailBody.Append("[" + op_name + "]執行[" + op_action + "]失敗,詳細資訊如下");
+                MailBody.Append("</td></tr>");
+                MailBody.Append("<tr><td>");
+                MailBody.Append(op_msg);
+                MailBody.Append("</td></tr>");
+                MailBody.Append("</table>");
+
+                SF.EmailNotify2Sys(Configer.MailServer, Configer.MailServerPort, Configer.MailSender, Configer.MailReceiver, true, MailSubject, MailBody.ToString());
+
+                Result = "監控項目復歸作業發生異常";
+
+                return Result;
+            }
+            finally
+            {
+                //寫入DB Log
+                OPLoger.SetOPLog(op_name, op_action, op_stime, op_etime, op_a_count, op_s_count, op_f_count, op_msg, op_result);
+                SF.log2DB(OPLoger, MailServer, MailServerPort, MailSender, MailReceiver);
+            }
+        }
 
         private AckDataViewModel getAckData(string s_class, string s_type, string s_sys)
         {
@@ -190,6 +272,7 @@ namespace CMD.Controllers
                                          .Where(AckDataClassWhereCondition)
                                          .Where(AckDataTypeWhereCondition)
                                          .Where(AckDataSysWhereCondition)
+                                         .Where(b=>b.is_ack == false)
                                          .OrderBy(b => b.監控項目編號)
                                          .OrderBy(b => b.監控項目主旨)
                                          .OrderBy(b => b.回報狀態)
@@ -202,8 +285,15 @@ namespace CMD.Controllers
                     MV.TypeList = SF.getTypeList(s_type);
                     //取得系統別清單
                     MV.SysList = SF.getSysList(s_type, s_sys);
+                    //取得復歸類別清單
+                    MV.AckTypeList = SF.getAckTypeList("1");
+                    //取得復歸原因清單
+                    MV.AckReasonList = SF.getAckReasonList(1,"1");
                     //取得復歸資料清單
                     MV.AckData = ackdatalist;
+                    //取得是否可以編輯監控項目權限
+                    MV.caneditMonitProperty = SF.isedit(Convert.ToBoolean(Session["UseCertLogin"].ToString()), Convert.ToInt16(Session["UserRole"].ToString()), 11);
+
                     if (ackdatalist != null && ackdatalist.Count>0)
                     {
                         op_result = true;

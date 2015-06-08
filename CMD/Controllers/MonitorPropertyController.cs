@@ -1087,7 +1087,7 @@ namespace CMD.Controllers
 
             //System.Threading.Thread.Sleep(3000); 
 
-            string Result = "succss";
+            string Result = "success";
 
             //return Result;
 

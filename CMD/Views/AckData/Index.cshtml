@@ -59,136 +59,153 @@
         @Html.Label("復歸類型", new { Class = "col-md-1 control-label" })
         @Html.DropDownListFor(m => m.nowAckType, (SelectList)Model.AckTypeList, new { Class = "col-md-11 form-control", id = "AckTypeList" })
     </div>
+</div>
+<div class="row">
     <div class="col-md-12">
         @Html.Label("復歸原因", new { Class = "col-md-1 control-label" })
         @Html.DropDownListFor(m => m.nowAckReason, (SelectList)Model.AckReasonList, new { Class = "col-md-11 form-control", id = "AckReasonList" })
     </div>
 </div>
-    <div class="row">
-        <div class="col-md-12" id="monitordataviewdiv">
-            <table class="table table-bordered" id="monitordataviewtb">
-                <tr class="active">
-                    <td id="Acktd"></td>
-                    <td id="Edittd">編輯監控項目</td>
-                    <td>監控項目主旨</td>
-                    <td>回報狀態</td>
-                    <td>異常發生時間</td>
-                    <td>異常恢復時間</td>
-                    <td>系統負責人</td>
-                    <td>環境</td>
-                    <td>分類</td>
-                    <td>系統別</td>
-                </tr>
-                @if (Model.AckData != null)
+<br />
+<div class="row">
+    <div class="col-md-12" id="monitordataviewdiv">
+        <table class="table table-bordered" id="monitordataviewtb">
+            <tr class="active">
+                <td id="Acktd">復歸</td>
+                <td id="Edittd">編輯監控項目</td>
+                <td>監控項目主旨</td>
+                <td>回報狀態</td>
+                <td>回報資料</td>
+                <td>異常發生時間</td>
+                <td>異常恢復時間</td>
+                <td>系統負責人</td>
+                <td>環境</td>
+                <td>分類</td>
+                <td>系統別</td>
+            </tr>
+            @if (Model.AckData != null)
+            {
+                foreach (var item in Model.AckData)
                 {
-                    foreach (var item in Model.AckData)
-                    {
-                        string TRClass = "danger";
+                    string TRClass = "danger";
 
-                        //if (item.回報結果 == "Unknown")
-                        //{
-                        //    TRClass = "warning";
-                        //}
-                        //else if (item.回報結果 == "Error" || item.回報結果 == "Fatal")
-                        //{
-                        //    TRClass = "danger";
-                        //}
-                        //else if (item.回報結果 == "Normal")
-                        //{
-                        //    TRClass = "success";
-                        //}
-                        //else
-                        //{
-                        //    TRClass = "info";
-                        //}
-                        <tr class=@TRClass>
-                            <td>@Html.CheckBox("Ack", new { id = "Ack" + "_" + item.復歸編號, Class = "checkbox" })</td>
-                            <td>@item.復歸編號</td>
-                            <td><a href=@Url.Content("~/MonitorProperty/Detail?sno=@item.監控項目編號")>@item.監控項目主旨</a></td>
-                            <td><a>@item.監控項目主旨</a></td>
-                            <td>@item.回報狀態</td>
-                            <td>@item.異常發生時間</td>
-                            <td>@item.異常恢復時間</td>
-                            <td>@item.環境</td>
-                            <td>@item.分類</td>
-                            <td>@item.系統別</td>
-                        </tr>
-                    }
+                    //if (item.回報結果 == "Unknown")
+                    //{
+                    //    TRClass = "warning";
+                    //}
+                    //else if (item.回報結果 == "Error" || item.回報結果 == "Fatal")
+                    //{
+                    //    TRClass = "danger";
+                    //}
+                    //else if (item.回報結果 == "Normal")
+                    //{
+                    //    TRClass = "success";
+                    //}
+                    //else
+                    //{
+                    //    TRClass = "info";
+                    //}
+                    <tr class=@TRClass>
+                        <td>@Html.CheckBox("Ack", new { id = "Ack" + "_" + item.復歸編號, Class = "checkbox" })</td>
+                        <td><a href=@Url.Content("~/MonitorProperty/Edit?sno=" +item.監控項目編號)>編輯</a></td>
+                        <td><a href=@Url.Content("~/MonitorProperty/Detail?sno="+ item.監控項目編號)>@item.監控項目主旨</a></td>
+                        <td>@item.回報狀態</td>
+                        <td> <a href=@Url.Content("~/MonitorProperty/MonitorResultIndex?sno="+item.監控項目編號)>@item.回報資料</a></td>
+                        <td>@item.異常發生時間</td>
+                        <td>@item.異常恢復時間</td>
+                        <td>@item.系統負責人</td>
+                        <td>@item.環境</td>
+                        <td>@item.分類</td>
+                        <td>@item.系統別</td>
+                    </tr>
                 }
-            </table>
-        </div>
+            }
+        </table>
     </div>
-    @Html.Raw(TempData["QueryMsg"])
-    @section ackdatascripts
+</div>
+@Html.Raw(TempData["QueryMsg"])
+@section ackdatascripts
 {
-        <script>
-            $(function () {
+    <script>
+    $(function () {
+        $("#serachdiv").hide();
+        $("#NeedSearchcbx").change(function () {
+            if ($("#NeedSearchcbx").prop("checked")) {
+                $("#serachdiv").show();
+            }
+            else {
                 $("#serachdiv").hide();
-                $("#NeedSearchcbx").change(function () {
-                    if ($("#NeedSearchcbx").prop("checked")) {
-                        $("#serachdiv").show();
+            }
+        });
+
+        //當類型選單變化時，連動取得系統別選單
+        $("#TypeList").change(function () {
+            var val = $("#TypeList :selected").val();
+            $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
+                $("#SysList option").remove();
+                $.each(data, function (i, opt) {
+                    $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
+                });
+            });
+        });
+
+        //當復歸類型選單變化時，連動取得系統別選單
+        $("#AckTypeList").change(function () {
+            var val = $("#AckTypeList :selected").val();
+            $.getJSON("@Url.Content("~/AckData/getAckReasonList")", 'a_id=' + val, function (data) {
+                    $("#AckReasonList option").remove();
+                    $.each(data, function (i, opt) {
+                        $("<option></option>").val(opt.id).text(opt.value).appendTo($("#AckReasonList"));
+                    });
+                });
+            });
+
+            //沒有編輯權限時，隱藏欄位
+            var canedit = '@Model.caneditMonitProperty';
+            if (canedit == 'False') {
+                $('td:nth-child(2)').hide();
+            }
+
+            $("#ackbtn").click(function () {
+                var AckList = "";
+                var AckType = "";
+                var AckReason = "";
+
+                AckType = $("#AckTypeList").val();
+                AckReason = $("#AckReasonList").val();
+
+                $('#monitordataviewtb').find('input[type="checkbox"]:checked').each(function () {
+                    //this is the current checkbox
+                    var currentid = this.id;
+                    if (AckList == "") {
+                        AckList = AckList + currentid.split("_")[1];
                     }
                     else {
-                        $("#serachdiv").hide();
+                        AckList = AckList + "," + currentid.split("_")[1];
                     }
                 });
 
-                //當類型選單變化時，連動取得系統別選單
-                $("#TypeList").change(function () {
-                    var val = $("#TypeList :selected").val();
-                    $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
-                        $("#SysList option").remove();
-                        $.each(data, function (i, opt) {
-                            $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
-                        });
-                    });
-                });
-
-                //當復歸類型選單變化時，連動取得系統別選單
-                $("#AckTypeList").change(function () {
-                    var val = $("#AckTypeList :selected").val();
-                    $.getJSON("@Url.Content("~/AckData/getAckReasonList")", 'a_id=' + val, function (data) {
-                        $("#AckTypeList option").remove();
-                        $.each(data, function (i, opt) {
-                            $("<option></option>").val(opt.id).text(opt.value).appendTo($("#AckTypeList"));
-                        });
-                    });
-                });
-
-                $("#ackbtn").click(function () {
-                    var AckList = "";
-                    $('#monitordataviewtb').find('input[type="checkbox"]:checked').each(function () {
-                        //this is the current checkbox
-                        var currentid = this.id;
-                        if (AckList == "") {
-                            AckList = AckList + currentid.split("_")[1];
-                        }
-                        else {
-                            AckList = AckList + "," + currentid.split("_")[1];
-                        }
+                if (AckList != "") {
+                    $.blockUI({
+                        message: '<h1><img src="~/pic/busy.gif" /> 正在復歸中，請稍後</h1>'
                     });
 
-                    if (AckList != "") {
-                        $.blockUI({
-                            message: '<h1><img src="~/pic/busy.gif" /> 正在復歸中，請稍後</h1>'
-                        });
-
-                        $.ajax({
-                            url: "@Url.Content("~/AckData/Ack")",
-                            type: "POST",
-                            contextType: "text/html; charset=utf-8",
-                            data: { AckList: AckList },
-                            success: function (data) {
-                                $.unblockUI();
-                                alert(data);
-                            }
-                        });
-                    }
-                    else {
-                        alert("請至少選一項目");
+                    $.ajax({
+                        url: "@Url.Content("~/AckData/Ack")",
+                    type: "POST",
+                    contextType: "text/html; charset=utf-8",
+                    data: { AckList: AckList, AckType: AckType, AckReason: AckReason },
+                    success: function (data) {
+                        $.unblockUI();
+                        alert("復歸成功");
                     }
                 });
+            }
+            else {
+                alert("請至少選一項目");
+            }
+        });
 
-            })
-        </script>
-    }
+    })
+    </script>
+}
