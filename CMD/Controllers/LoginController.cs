@@ -153,7 +153,47 @@ namespace CMD.Controllers
             }
             return Role;
         }
-    }
 
-   
+        public ActionResult Logout()
+        {
+            //初始化系統參數
+            Configer.Init();
+
+            string ConnStr = Configer.C_DBConnstring;
+
+            string op_name =Session["UserID"].ToString();
+            string op_action = "系統登出作業";
+            DateTime op_stime = default(DateTime);
+            DateTime op_etime = default(DateTime);
+            int op_a_count = 1;
+            int op_s_count = 0;
+            int op_f_count = 0;
+            string op_msg = string.Empty;
+            bool op_result = true;
+
+            string MailServer = Configer.MailServer;
+            int MailServerPort = Configer.MailServerPort;
+            string MailSender = Configer.MailSender;
+            List<string> MailReceiver = Configer.MailReceiver;
+
+            //共用涵式用
+            SF.ConnStr = ConnStr;
+            SF.op_name = op_name;
+
+            op_stime = DateTime.Now;
+
+            Session["UserID"] = null;
+            Session["UseCertLogin"] = null;
+
+            op_etime = DateTime.Now;
+            op_s_count = 1;
+
+            op_msg = op_name + "執行[" + op_action +"]成功";
+
+            OPLoger.SetOPLog(op_name, op_action, op_stime, op_etime, op_a_count, op_s_count, op_f_count, op_msg, op_result);
+            SF.log2DB(OPLoger, MailServer, MailServerPort, MailSender, MailReceiver);
+
+            return RedirectToAction("Index", "Login");
+        }
+    }
 }
