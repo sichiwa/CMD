@@ -118,13 +118,13 @@
                         <td>@item.是否由HostMonitor監控</td>
                         <td><a href="/MonitorProperty/Detail?sno=@item.監控項目編號">@item.監控項目主旨</a></td>
                         <td><a href="/MonitorProperty/MonitorResultIndex?sno=@item.監控項目編號">@item.回報資料</a></td>
-                        @if (item.回報時間.Value == null)
+                        @if (item.回報時間 != null)
                         {
-                            <td>無回報時間</td>
+                            <td>@item.回報時間.Value.ToString("yyyy/MM/dd HH:mm:ss")</td>
                         }
                         else
                         {
-                            <td>@item.回報時間.Value.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                            <td>無回報時間</td>
                         }
                         <td>@item.回報結果</td>
                         <td>@item.環境</td>
