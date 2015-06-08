@@ -10,6 +10,7 @@ using CMD.Models;
 using CMD.SystemClass;
 using CMD.ViewModels;
 using TWCAlib;
+using PagedList;
 
 
 namespace CMD.Controllers
@@ -24,7 +25,7 @@ namespace CMD.Controllers
         String op_name = "顯示中控台";
         
         // GET: AckData
-        public ActionResult Index()
+        public ActionResult Index(int page = 1)
         {
             //初始化系統參數
             Configer.Init();
@@ -33,8 +34,10 @@ namespace CMD.Controllers
             SF.ConnStr = Configer.C_DBConnstring;
             SF.op_name = op_name;
 
+            int currentPage = page < 1 ? 1 : page;
+
             //初始化回傳物件
-            AckDataViewModel MV = getAckData("-1", "-1", "-1");
+            AckDataViewModel MV = getAckData("-1", "-1", "-1", currentPage);
             if (MV != null)
             {
                 if (MV ==null || MV.AckData.Count() <= 0)
@@ -53,7 +56,7 @@ namespace CMD.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(QueryAckData QMD)
+        public ActionResult Index(QueryAckData QMD, int page = 1)
         {
             //初始化系統參數
             Configer.Init();
@@ -62,8 +65,10 @@ namespace CMD.Controllers
             SF.ConnStr = Configer.C_DBConnstring;
             SF.op_name = op_name;
 
+            int currentPage = page < 1 ? 1 : page;
+
             //初始化回傳物件
-            AckDataViewModel MV = getAckData(QMD.nowClass, QMD.nowType, QMD.nowSys);
+            AckDataViewModel MV = getAckData(QMD.nowClass, QMD.nowType, QMD.nowSys, currentPage);
 
             if (MV != null)
             {
@@ -215,7 +220,7 @@ namespace CMD.Controllers
             }
         }
 
-        private AckDataViewModel getAckData(string s_class, string s_type, string s_sys)
+        private AckDataViewModel getAckData(string s_class, string s_type, string s_sys, int currentPage)
         {
             AckDataViewModel MV = new AckDataViewModel();
             string op_action = null;
@@ -272,11 +277,13 @@ namespace CMD.Controllers
                                          .Where(AckDataClassWhereCondition)
                                          .Where(AckDataTypeWhereCondition)
                                          .Where(AckDataSysWhereCondition)
-                                         .Where(b=>b.is_ack == false)
+                                         .Where(b => b.is_ack == false)
                                          .OrderBy(b => b.監控項目編號)
                                          .OrderBy(b => b.監控項目主旨)
                                          .OrderBy(b => b.回報狀態)
-                                         .OrderBy(b => b.異常發生時間).ToList();
+                                         .OrderBy(b => b.異常發生時間);
+
+                    var Resultackdatalist = ackdatalist.ToPagedList(currentPage, Configer.NumofgridviewPage_perrows);
 
                     op_etime = DateTime.Now;
                     //取得環境清單
@@ -290,14 +297,14 @@ namespace CMD.Controllers
                     //取得復歸原因清單
                     MV.AckReasonList = SF.getAckReasonList(1,"1");
                     //取得復歸資料清單
-                    MV.AckData = ackdatalist;
+                    MV.AckData = Resultackdatalist;
                     //取得是否可以編輯監控項目權限
                     MV.caneditMonitProperty = SF.isedit(Convert.ToBoolean(Session["UseCertLogin"].ToString()), Convert.ToInt16(Session["UserRole"].ToString()), 11);
 
-                    if (ackdatalist != null && ackdatalist.Count>0)
+                    if (Resultackdatalist != null && Resultackdatalist.Count > 0)
                     {
                         op_result = true;
-                        op_a_count = ackdatalist.Count;
+                        op_a_count = Resultackdatalist.Count;
                         op_s_count = op_a_count;
                         op_msg = "[" + op_name + "]執行[" + op_action + "]成功,本次查詢共" + op_s_count.ToString() + "筆待復歸檢視資料";
                         SF.logandshowInfo(op_msg, log_Info);

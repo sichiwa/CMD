@@ -1253,7 +1253,7 @@ namespace CMD.Controllers
                     {
                         op_etime = DateTime.Now;
                         MonitorResultHistory MV = new MonitorResultHistory();
-                        MV.AckData = ResultMD;
+                        MV.MonitorDataHistory = ResultMD;
 
                         var MP = CMS.v_MonitorProperty_Detail
                                     .Where(b => b.s_no == sno).First();
@@ -1397,7 +1397,7 @@ namespace CMD.Controllers
                     {
                         op_etime = DateTime.Now;
                         MonitorResultHistory MV = new MonitorResultHistory();
-                        MV.AckData = ResultMD;
+                        MV.MonitorDataHistory = ResultMD;
 
                         var MP = CMS.v_MonitorProperty_Detail
                                     .Where(b => b.s_no == sno).First();

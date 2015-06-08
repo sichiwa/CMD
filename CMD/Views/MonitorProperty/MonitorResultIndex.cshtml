@@ -82,7 +82,7 @@
                 <td>回報內容</td>
             </tr>
 
-            @foreach (var item in Model.AckData)
+            @foreach (var item in Model.MonitorDataHistory)
             {
                 string TRClass = "active";
 
@@ -110,7 +110,7 @@
             }
         </table>
 
-        @Html.PagedListPager(Model.AckData, Page => Url.Action("MonitorResultIndex", new { sno=Model.sno, Page }))
+        @Html.PagedListPager(Model.MonitorDataHistory, Page => Url.Action("MonitorResultIndex", new { sno=Model.sno, Page }))
     </div>
 </div>
 @Html.Raw(TempData["GetMonitorResultMsg"])

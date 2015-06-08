@@ -121,6 +121,8 @@
                 }
             }
         </table>
+
+        @Html.PagedListPager(Model.AckData, Page => Url.Action("Index", new { s_class = Model.nowClass,s_type=Model.nowType,s_sys=Model.nowSys, Page }))
     </div>
 </div>
 @Html.Raw(TempData["QueryMsg"])

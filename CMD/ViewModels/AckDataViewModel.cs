@@ -19,6 +19,6 @@ namespace CMD.ViewModels
         public SelectList SysList { get; set; }
         public SelectList AckTypeList { get; set; }
         public SelectList AckReasonList { get; set; }
-        public IEnumerable<v_ACK_Data> AckData { get; set; }
+        public PagedList.IPagedList<v_ACK_Data> AckData { get; set; }
     }
 }

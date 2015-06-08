@@ -22,6 +22,6 @@ namespace CMD.ViewModels
         public SelectList SysList { get; set; }
         public SelectList StatusList { get; set; }
         public SelectList SubjectList { get; set; }
-        public PagedList.IPagedList<v_Monitor_All_Reult_History> AckData { get; set; }
+        public PagedList.IPagedList<v_Monitor_All_Reult_History> MonitorDataHistory { get; set; }
     }
 }
