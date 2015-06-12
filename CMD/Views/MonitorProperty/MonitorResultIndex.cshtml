@@ -86,15 +86,15 @@
             {
                 string TRClass = "active";
 
-                if (item.回報結果 == "Unknown")
+                if (item.s_status == "Unknown")
                 {
                     TRClass = "warning";
                 }
-                else if (item.回報結果 == "Error" || item.回報結果 == "Fatal")
+                else if (item.s_status == "Error" || item.s_status == "Fatal")
                 {
                     TRClass = "danger";
                 }
-                else if (item.回報結果 == "Normal")
+                else if (item.s_status == "Normal")
                 {
                     TRClass = "success";
                 }
@@ -103,9 +103,9 @@
                     TRClass = "info";
                 }
                 <tr class=@TRClass>
-                    <td>@item.回報時間</td>
-                    <td>@item.回報結果</td>
-                    <td>@item.回報內容</td>
+                    <td>@item.s_time.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                    <td>@item.s_status</td>
+                    <td>@item.s_msg</td>
                 </tr>
             }
         </table>

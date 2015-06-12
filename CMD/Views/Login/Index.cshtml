@@ -36,18 +36,18 @@
             </div>
             <div class="row form-group">
                 @Html.LabelFor(m => Model.UserID, new { @class = "control-label col-md-1 col-md-offset-4" })
-                @Html.TextBoxFor(m => Model.UserID, new { @class = "form-control", @name = "UserName", @placeholder = "請輸入網域帳號(ex:TAS000)" })
+                @Html.TextBoxFor(m => Model.UserID, new { @class = "form-control", @name = "UserName", @placeholder = "請輸入帳號" })
                 @Html.ValidationMessageFor(m => Model.UserID, "", new { @class = "text-danger" })
 
             </div>
             <div class="row form-group">
                 @Html.LabelFor(m => Model.Pwd, new { @class = "control-label col-md-1 col-md-offset-4" })
-                @Html.TextBoxFor(m => Model.Pwd, new { @type = "password", @class = "form-control", @name = "Pwd", @placeholder = "請輸入網域密碼" })
+                @Html.TextBoxFor(m => Model.Pwd, new { @type = "password", @class = "form-control", @name = "Pwd", @placeholder = "請輸入密碼" })
                 @Html.ValidationMessageFor(m => Model.Pwd, "", new { @class = "text-danger" })
             </div>
             <div class="row form-group" id="CertPwddiv">
-                @Html.Label("員工憑證密碼", new { @class = "control-label col-md-1 col-md-offset-4" })
-                <input type="password" class="form-control" name="CertPwd" id="CertPwd" placeholder="請輸入員工憑證密碼" />
+                @Html.Label("憑證密碼", new { @class = "control-label col-md-1 col-md-offset-4" })
+                <input type="password" class="form-control" name="CertPwd" id="CertPwd" placeholder="請輸入憑證密碼" />
             </div>
             <div class="row form-group">
                 <input type="hidden" name="Plaintext" id="Plaintext" />

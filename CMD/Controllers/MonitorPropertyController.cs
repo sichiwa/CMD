@@ -1241,9 +1241,13 @@ namespace CMD.Controllers
 
                     int currentPage = page < 1 ? 1 : page;
 
-                    var MD = CMS.v_Monitor_All_Reult_History
+                    //var MD = CMS.v_Monitor_All_Reult_History
+                    //            .Where(b => b.s_no == sno)
+                    //            .OrderByDescending(b => b.回報時間);
+
+                    var MD = CMS.ALL_LOG
                                 .Where(b => b.s_no == sno)
-                                .OrderByDescending(b => b.回報時間);
+                                .OrderByDescending(b => b.s_time);
 
                     var ResultMD = MD.ToPagedList(currentPage, Configer.NumofgridviewPage_perrows);
                     //.Where(b => b.回報時間 >= STime)
@@ -1372,10 +1376,10 @@ namespace CMD.Controllers
                     string TmpETime = ETime.ToString("yyyy/MM/dd") + " 23:59:59";
                     ETime = Convert.ToDateTime(TmpETime);
 
-                    Expression<Func<v_Monitor_All_Reult_History, bool>> StatusWhereCondition;
+                    Expression<Func<ALL_LOG, bool>> StatusWhereCondition;
                     if (nowStatus != "-1")
                     {
-                        StatusWhereCondition = b => b.回報結果 == nowStatus;
+                        StatusWhereCondition = b => b.s_status == nowStatus;
                     }
                     else
                     {
@@ -1384,12 +1388,19 @@ namespace CMD.Controllers
 
                     int currentPage = page < 1 ? 1 : page;
 
-                    var MD = CMS.v_Monitor_All_Reult_History
-                               .Where(b => b.s_no == sno)
-                               .Where(StatusWhereCondition)
-                               .Where(b => b.回報時間 >= STime)
-                               .Where(b => b.回報時間 <= ETime)
-                               .OrderByDescending(b => b.回報時間);
+                    //var MD = CMS.v_Monitor_All_Reult_History
+                    //           .Where(b => b.s_no == sno)
+                    //           .Where(StatusWhereCondition)
+                    //           .Where(b => b.回報時間 >= STime)
+                    //           .Where(b => b.回報時間 <= ETime)
+                    //           .OrderByDescending(b => b.回報時間);
+
+                    var MD = CMS.ALL_LOG
+                             .Where(b => b.s_no == sno)
+                             .Where(StatusWhereCondition)
+                             .Where(b => b.s_time >= STime)
+                             .Where(b => b.s_time <= ETime)
+                             .OrderByDescending(b => b.s_time);
 
                     var ResultMD = MD.ToPagedList(currentPage, Configer.NumofgridviewPage_perrows);
 

@@ -51,8 +51,8 @@
             if (val == null)
             { val = "0"; }
             $.getJSON("@Url.Content("~/api/MonitorData")", 's_class=' + val, function (data) {
-                $('#Prod').addClass(data.ProdbtnClass);
-                $('#Test').addClass(data.TestbtnClass);
+                $('#Prod').attr("class", "btngetdata").addClass(data.ProdbtnClass);
+                $('#Test').attr("class", "btngetdata").addClass(data.TestbtnClass);
                 var caneditMonitProperty = data.caneditMonitProperty;
                 var ProdbtnInfos = data.ProdbtnInfos;
                 var TestbtnInfos = data.TestbtnInfos;
@@ -102,8 +102,8 @@
                         contextType: "application/json; charset=utf-8",
                         data: 's_class=' + s_class,
                         success: function (data) {
-                            $('#Prod').addClass(data.ProdbtnClass);
-                            $('#Test').addClass(data.TestbtnClass);
+                            $('#Prod').attr("class", "btngetdata").addClass(data.ProdbtnClass);
+                            $('#Test').attr("class", "btngetdata").addClass(data.TestbtnClass);
                             var caneditMonitProperty = data.caneditMonitProperty;
                             var ProdbtnInfos = data.ProdbtnInfos;
                             var TestbtnInfos = data.TestbtnInfos;
