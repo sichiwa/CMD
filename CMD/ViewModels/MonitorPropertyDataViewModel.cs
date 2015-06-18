@@ -16,12 +16,13 @@ namespace CMD.ViewModels
         public string nowStatus { get; set; }
         public string nowUser { get; set; }
         public string nowSubject { get; set; }
+        public string sno { get; set; }
         public SelectList ClassList { get; set; }
         public SelectList TypeList { get; set; }
         public SelectList SysList { get; set; }
         public SelectList StatusList { get; set; }
         public SelectList UserList { get; set; }
-        //public IEnumerable<SelectListItem> SubjectList { get; set; }
+        public SelectList SubjectList { get; set; }
         public IEnumerable<v_Monitor_Data> MonitorData { get; set; }
         
     }

@@ -62,7 +62,7 @@ namespace CMD.Controllers
             SF.op_name = op_name;
 
             //初始化回傳物件
-            MonitorPropertyDataViewModel MV = getMonitorPropertyData(QMD.nowClass, QMD.nowType, QMD.nowSys, QMD.nowStatus, QMD.nowUser);
+            MonitorPropertyDataViewModel MV = getMonitorPropertyData(QMD.nowClass, QMD.nowType, QMD.nowSys,QMD.sno, QMD.nowStatus, QMD.nowUser);
 
             using (CMSEntities CMS = new CMSEntities())
             {
@@ -1413,6 +1413,7 @@ namespace CMD.Controllers
                         var MP = CMS.v_MonitorProperty_Detail
                                     .Where(b => b.s_no == sno).First();
 
+                        MV.sno = MP.s_no;
                         MV.監控項目主旨 = MP.s_subject;
                         MV.環境 = MP.環境;
                         MV.分類 = MP.分類;
@@ -1606,7 +1607,9 @@ namespace CMD.Controllers
                     //取得回報狀態清單
                     MV.StatusList = SF.getStatusList(s_status);
                     //取得監控項目主旨清單
-                    //MV.SubjectList = SF.getSubjectList();
+                    MV.SubjectList = SF.getSubjectList(s_class, s_type, s_sys, "");
+                    //取得監控項目編號
+                    MV.sno = "-1";
                     //取得目前環境
                     MV.nowClass = s_class;
                     //取得目前分類
@@ -1687,7 +1690,7 @@ namespace CMD.Controllers
         /// <param name="nowSatus"></param>
         /// <param name="nowUser"></param>
         /// <returns></returns>
-        private MonitorPropertyDataViewModel getMonitorPropertyData(string nowClass, string nowType, string nowSys, string nowSatus, string nowUser)
+        private MonitorPropertyDataViewModel getMonitorPropertyData(string nowClass, string nowType, string nowSys, string sno, string nowSatus, string nowUser)
         {
             MonitorPropertyDataViewModel MV = new MonitorPropertyDataViewModel();
 
@@ -1698,6 +1701,7 @@ namespace CMD.Controllers
                 string s_sys = nowSys;
                 string s_status = nowSatus;
                 string s_user = nowUser;
+                string s_sno = sno;
 
                 var MD = new List<v_Monitor_Data>();
 
@@ -1769,6 +1773,15 @@ namespace CMD.Controllers
                     {
                         MonitorDataAdminWhereCondition = b => 1 == 1;
                     }
+                    Expression<Func<v_Monitor_Data, bool>> MonitorDataSNOWhereCondition;
+                    if (s_sno != "-1")
+                    {
+                        MonitorDataSNOWhereCondition = b => b.監控項目編號 == s_sno;
+                    }
+                    else
+                    {
+                        MonitorDataSNOWhereCondition = b => 1 == 1;
+                    }
 
                     MD = CMS.v_Monitor_Data
                          .Where(MonitorDataClassWhereCondition)
@@ -1776,6 +1789,7 @@ namespace CMD.Controllers
                          .Where(MonitorDataSysWhereCondition)
                          .Where(MonitorDataStatusWhereCondition)
                          .Where(MonitorDataAdminWhereCondition)
+                         .Where(MonitorDataSNOWhereCondition)
                          .OrderBy(b => b.順序).ThenBy(b => b.監控項目編號).ToList();
 
                     string UserID = Session["UserID"].ToString();//TAS191;
@@ -1795,7 +1809,9 @@ namespace CMD.Controllers
                     //取得回報狀態清單
                     MV.StatusList = SF.getStatusList(s_status);
                     //取得監控項目主旨清單
-                    //MV.SubjectList = SF.getSubjectList();
+                    MV.SubjectList = SF.getSubjectList(s_class, s_type, s_sys, s_sno);
+                    //取得監控項目編號
+                    MV.sno = s_sno;
                     //取得目前環境
                     MV.nowClass = s_class;
                     //取得目前分類

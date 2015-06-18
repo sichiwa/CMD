@@ -29,7 +29,7 @@
                 </div>
                 <div class="row form-group">
                     @Html.Label("環境", new { Class = "col-md-1 control-label" })
-                    @Html.DropDownListFor(m => m.nowClass, (SelectList)Model.ClassList, new { Class = "form-control" })
+                    @Html.DropDownListFor(m => m.nowClass, (SelectList)Model.ClassList, new { Class = "form-control", id = "ClassList" })
                 </div>
                 <div class="row form-group">
                     @Html.Label("分類", new { Class = "col-md-1 control-label" })
@@ -40,13 +40,13 @@
                     @Html.DropDownListFor(m => m.nowSys, (SelectList)Model.SysList, new { Class = "form-control", id = "SysList" })
                 </div>
                 <div class="row form-group">
+                    @Html.Label("監控項目主旨", new { Class = "col-md-1 control-label" })
+                    @Html.DropDownListFor(m => m.sno, (SelectList)Model.SubjectList, new { Class = "form-control", id = "SubjectList" })
+                </div>
+                <div class="row form-group">
                     @Html.Label("負責人", new { Class = "col-md-1 control-label" })
                     @Html.DropDownListFor(m => m.nowUser, (SelectList)Model.UserList, new { Class = "form-control" })
                 </div>
-                @*<div class="form-group">
-                        @Html.Label("監控項目主旨");
-                        @Html.DropDownList("ClassList", (IEnumerable<SelectListItem>)Model.SubjectList, new { Class = "form-control" });
-                    </div>*@
                 <div class="row form-group">
                     <input type="submit" class="col-md-offset-1 col-md-12 btn btn-primary" id="submitbtn" value="查詢" />
                 </div>
@@ -165,6 +165,20 @@
                     $("#SysList option").remove();
                     $.each(data, function (i, opt) {
                         $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
+                    });
+                });
+            });
+
+            //當系統別選單變化時，連動取得監控項目主旨選單
+            $("#SysList").change(function () {
+                var nowClass = $("#ClassList :selected").val();
+                var nowType = $("#TypeList :selected").val();
+                var nowSys = $("#SysList :selected").val();
+                $.getJSON("@Url.Content("~/MonitorProperty/getSubjectList")", 'nowClass=' + nowClass + '&nowType=' + nowType + '&nowSys=' + nowSys, function (data) {
+                    $("#SubjectList option").remove();
+                    $("<option></option>").val("-1").text("全部").appendTo($("#SubjectList"));
+                    $.each(data, function (i, opt) {
+                        $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SubjectList"));
                     });
                 });
             });
