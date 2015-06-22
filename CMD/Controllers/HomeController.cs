@@ -11,6 +11,7 @@ namespace CMD.Controllers
     public class HomeController : Controller
     {
         [CustomAuthorize]
+        [CheckSessionFilterAttribute]
         public ActionResult Index(string s_class)
         {
             return View();

@@ -230,6 +230,7 @@
     <Compile Include="Models\btnInfos.cs" />
     <Compile Include="Models\QueryAckData.cs" />
     <Compile Include="Models\QueryMonitorResultData.cs" />
+    <Compile Include="SystemClass\CheckSessionFilterAttribute.cs" />
     <Compile Include="SystemClass\CustomAuthorize.cs" />
     <Compile Include="SystemClass\SyncAndCheck.cs" />
     <Compile Include="ViewModels\AckDataViewModel.cs" />

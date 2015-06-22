@@ -15,6 +15,7 @@ using PagedList;
 namespace CMD.Controllers
 {
     [CustomAuthorize]
+    [CheckSessionFilterAttribute]
     public class MonitorPropertyController : Controller
     {
         SystemConfig Configer = new SystemConfig();

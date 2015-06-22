@@ -15,6 +15,8 @@ namespace CMD.Controllers
         SystemConfig Configer = new SystemConfig();
         OPLog OPLoger = new OPLog();
         ShareFunc SF = new ShareFunc();
+        String log_Info = "Info";
+        String log_Err = "Err";
 
         // GET: Login
         public ActionResult Index()
@@ -67,7 +69,7 @@ namespace CMD.Controllers
                     //缺少系統參數，需記錄錯誤
                     op_etime = DateTime.Now;
                     op_f_count=1;
-                    op_msg = "登入失敗，錯誤訊息:[缺少系統參數LDAPName或AVerifyURL]";
+                    op_msg = "登入失敗，錯誤訊息:[缺少系統參數LDAPName或VAVerifyURL]";
                     op_result = false;
                     OPLoger.SetOPLog(op_name, op_action, op_stime, op_etime, op_a_count, op_s_count, op_f_count, op_msg, op_result);
                     SF.log2DB(OPLoger, MailServer, MailServerPort, MailSender, MailReceiver);
@@ -86,7 +88,15 @@ namespace CMD.Controllers
                     VA.VAVerifyURL = VAVerifyURL;
                     VA.Tolerate = 120;
 
-                    if (LP.DoLogin(UseCertLogin, AD, VA) == true)
+                    DateTime LoginStartTime = DateTime.Now;
+                    SF.logandshowInfo("登入開始@" + LoginStartTime.ToString(Configer.SystemDateTimeFormat), log_Info);
+                    bool LoginResult = LP.DoLogin(UseCertLogin, AD, VA);
+                    DateTime LoginEndTime = DateTime.Now;
+                    SF.logandshowInfo("登入結束@" + LoginEndTime.ToString(Configer.SystemDateTimeFormat), log_Info);
+                    string LoginSpanTime = OtherProcesser.TimeDiff(LoginStartTime, LoginEndTime, "Milliseconds");
+                    SF.logandshowInfo("本次登入共花費@" + LoginSpanTime +"毫秒", log_Info);
+
+                    if (LoginResult == true)
                     {
                         //登入成功，需紀錄
                         op_etime = DateTime.Now;
