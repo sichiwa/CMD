@@ -97,7 +97,7 @@ namespace CMD.Controllers
                     SF.logandshowInfo("本次登入共花費@" + LoginSpanTime +"毫秒", log_Info);
 
                     if (LoginResult == true)
-                    {
+                    {  
                         //登入成功，需紀錄
                         op_etime = DateTime.Now;
                         op_s_count = 1;

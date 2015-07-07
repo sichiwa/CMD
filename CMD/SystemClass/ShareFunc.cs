@@ -660,7 +660,7 @@ namespace CMD.SystemClass
             }
         }
 
-        public bool isedit(bool UseCertLogin, int RoleID, int FucnID)
+        public bool isedit(bool UseCertLogin, int RoleID, int FuncID)
         {
             bool Result = false;
 
@@ -674,7 +674,7 @@ namespace CMD.SystemClass
                 {
                     int RoleMappingCount = CMS.RoleFuncMapping
                                 .Where(b => b.r_id == RoleID)
-                                .Where(b => b.f_id == FucnID).Count();
+                                .Where(b => b.f_id == FuncID).Count();
 
                     if (RoleMappingCount > 0)
                     {

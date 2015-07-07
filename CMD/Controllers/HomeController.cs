@@ -10,8 +10,8 @@ namespace CMD.Controllers
 {
     public class HomeController : Controller
     {
-        [CustomAuthorize]
         [CheckSessionFilterAttribute]
+        [CustomAuthorize]   
         public ActionResult Index(string s_class)
         {
             return View();

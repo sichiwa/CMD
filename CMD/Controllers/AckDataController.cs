@@ -15,8 +15,8 @@ using PagedList;
 
 namespace CMD.Controllers
 {
-    [CustomAuthorize]
     [CheckSessionFilterAttribute]
+    [CustomAuthorize]   
     public class AckDataController : Controller
     {
         SystemConfig Configer = new SystemConfig();

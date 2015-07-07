@@ -10,6 +10,8 @@
     <div class="col-md-12 table-bordered">
         <h2>基本設定</h2>
         <div>
+            @Html.LabelFor(m => m.s_no, new { Class = "label label-success" }):
+            @Html.LabelForModel(Model.s_no)
             @Html.LabelFor(m => m.環境, new { Class = "label label-success" }):
             @Html.LabelForModel(Model.環境)
             @Html.LabelFor(m => m.分類, new { Class = "label label-success" }):
