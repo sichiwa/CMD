@@ -103,7 +103,7 @@
                         <td>@item.異常發生時間.ToString("yyyy/MM/dd HH:mm:ss")</td>
                         @if (item.異常恢復時間 != null)
                         {
-                            <td>item.異常恢復時間.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                            <td>@item.異常恢復時間.Value.ToString("yyyy/MM/dd HH:mm:ss")</td>
                         }
                         else
                         {

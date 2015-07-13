@@ -73,10 +73,15 @@ namespace CMD.Controllers
             string nowClass = QMD.nowClass.Trim();
             string nowType = QMD.nowType.Trim();
             string nowSys = QMD.nowSys.Replace(" ","");
-            string nowUser = QMD.nowUser.Trim();
+            string nowUser = "";
             DateTime STime = QMD.STime;
             DateTime ETime = QMD.ETime;
 
+            if (QMD.nowUser!=null)
+            {
+                nowUser = QMD.nowUser.Trim();
+            }
+         
             string TmpETime = ETime.ToString("yyyy/MM/dd") + " 23:59:59";
             ETime = Convert.ToDateTime(TmpETime);
 
