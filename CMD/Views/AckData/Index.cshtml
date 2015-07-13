@@ -14,34 +14,34 @@
 </div>
 <div class="row">
     <div class="col-md-12" id="serachdiv">
-        @using (Html.BeginForm())
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "queryform" }))
         {
-            <div class="row">
-                <div class="form-group">
-                    @Html.Label("環境", new { Class = "col-md-1 control-label" })
-                    @Html.DropDownListFor(m => m.nowClass, (SelectList)Model.ClassList, new { Class = "col-md-11 form-control" })
-                </div>
-                <br />
-                <div class="form-group">
-                    @Html.Label("分類", new { Class = "col-md-1 control-label" })
-                    @Html.DropDownListFor(m => m.nowType, (SelectList)Model.TypeList, new { Class = "col-md-11 form-control", id = "TypeList" })
-                </div>
-                <br />
-                <div class="form-group">
-                    @Html.Label("系統", new { Class = "col-md-1 control-label" })
-                    @Html.DropDownListFor(m => m.nowSys, (SelectList)Model.SysList, new { Class = "col-md-11 form-control", id = "SysList" })
-                </div>
-                <br />
-                @*<div class="form-group">
-                        @Html.Label("監控項目主旨");
-                        @Html.DropDownList("ClassList", (IEnumerable<SelectListItem>)Model.SubjectList, new { Class = "form-control" });
-                    </div>*@
+            <div class="row form-group">
+                @Html.Label("環境", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.nowClass, (SelectList)Model.ClassList, new { Class = "form-control", id = "ClassList" })
             </div>
-            <br />
-            <div class="row">
-                <div class="form-group">
-                    <input type="submit" class="col-md-offset-1 col-md-12 btn btn-primary" id="submitbtn" value="查詢" />
-                </div>
+            <div class="row form-group">
+                @Html.Label("分類", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.nowType, (SelectList)Model.TypeList, new { Class = "form-control", id = "TypeList" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("系統", new { Class = "col-md-1 control-label" })
+                @Html.DropDownListFor(m => m.nowSys, (SelectList)Model.SysList, new { Class = "form-control", id = "SysList" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("系統負責人", new { Class = "col-md-1 control-label" })
+                @Html.TextBox("nowUser", "", new { Class = "form-control" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("異常發生時間(開始)", new { Class = "col-md-1 control-label" })
+                @Html.TextBox("STime", "", new { Class = "form-control date-picker" })
+            </div>
+            <div class="row form-group">
+                @Html.Label("異常發生時間(結束)", new { Class = "col-md-1 control-label" })
+                @Html.TextBox("ETime", "", new { Class = "form-control date-picker" })
+            </div>
+            <div class="row form-group">
+                <input type="submit" class="col-md-offset-1 col-md-12 btn btn-primary" id="submitbtn" value="查詢" />
             </div>
         }
     </div>
@@ -66,6 +66,12 @@
         @Html.DropDownListFor(m => m.nowAckReason, (SelectList)Model.AckReasonList, new { Class = "col-md-11 form-control", id = "AckReasonList" })
     </div>
 </div>
+<div class="row">
+    <div class="col-md-12">
+        @Html.Label("全選", new { Class = "col-md-1 control-label" })
+        @Html.CheckBox("CheckAllcbx")
+    </div>
+</div>
 <br />
 <div class="row">
     <div class="col-md-12" id="monitordataviewdiv">
@@ -88,31 +94,20 @@
                 foreach (var item in Model.AckData)
                 {
                     string TRClass = "danger";
-
-                    //if (item.回報結果 == "Unknown")
-                    //{
-                    //    TRClass = "warning";
-                    //}
-                    //else if (item.回報結果 == "Error" || item.回報結果 == "Fatal")
-                    //{
-                    //    TRClass = "danger";
-                    //}
-                    //else if (item.回報結果 == "Normal")
-                    //{
-                    //    TRClass = "success";
-                    //}
-                    //else
-                    //{
-                    //    TRClass = "info";
-                    //}
                     <tr class=@TRClass>
                         <td>@Html.CheckBox("Ack", new { id = "Ack" + "_" + item.復歸編號, Class = "checkbox" })</td>
                         <td><a href=@Url.Content("~/MonitorProperty/Edit?sno=" +item.監控項目編號)>編輯</a></td>
                         <td><a href=@Url.Content("~/MonitorProperty/Detail?sno="+ item.監控項目編號)>@item.監控項目主旨</a></td>
                         <td>@item.回報狀態</td>
                         <td> <a href=@Url.Content("~/MonitorProperty/MonitorResultIndex?sno="+item.監控項目編號)>@item.回報資料</a></td>
-                        <td>@item.異常發生時間</td>
-                        <td>@item.異常恢復時間</td>
+                        <td>@item.異常發生時間.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                        @if (item.異常恢復時間 != null)
+                        {
+                            <td>item.異常恢復時間.ToString("yyyy/MM/dd HH:mm:ss")</td>
+                        }
+                        else
+                        {
+                        <td>@item.異常恢復時間</td>}
                         <td>@item.系統負責人</td>
                         <td>@item.環境</td>
                         <td>@item.分類</td>
@@ -122,39 +117,88 @@
             }
         </table>
 
-        @Html.PagedListPager(Model.AckData, Page => Url.Action("Index", new { s_class = Model.nowClass,s_type=Model.nowType,s_sys=Model.nowSys, Page }))
+        @Html.PagedListPager(Model.AckData, Page => Url.Action("Index", new { s_class = Model.nowClass, s_type = Model.nowType, s_sys = Model.nowSys, Page }))
     </div>
 </div>
 @Html.Raw(TempData["QueryMsg"])
 @section ackdatascripts
 {
     <script>
-    $(function () {
-        $("#serachdiv").hide();
-        $("#NeedSearchcbx").change(function () {
-            if ($("#NeedSearchcbx").prop("checked")) {
-                $("#serachdiv").show();
-            }
-            else {
-                $("#serachdiv").hide();
-            }
-        });
+        $(function () {
+            $("#serachdiv").hide();
+            $("#NeedSearchcbx").change(function () {
+                if ($("#NeedSearchcbx").prop("checked")) {
+                    $("#serachdiv").show();
+                }
+                else {
+                    $("#serachdiv").hide();
+                }
+            });
 
-        //當類型選單變化時，連動取得系統別選單
-        $("#TypeList").change(function () {
-            var val = $("#TypeList :selected").val();
-            $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
-                $("#SysList option").remove();
-                $.each(data, function (i, opt) {
-                    $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
+            jQuery.validator.setDefaults({
+                debug: false,
+                success: "valid"
+            });
+            var form = $("#queryform");
+            form.validate({
+                errorPlacement: function (label, element) {
+                    label.addClass('text-danger');
+                    label.insertAfter(element);
+                }
+            });
+
+            $(".date-picker").rules("add", {
+                required: true,
+                date: true,
+                messages: {
+                    required: "此欄位為必填欄位",
+                    date: "請輸入正確日期格式(yyyy-MM-dd)"
+                }
+            });
+
+            var today = new Date();
+            var daylastMonth = new Date(new Date(today).setMonth(today.getMonth() - 1));
+
+            $(".date-picker").datepicker({
+                changeMonth: true,
+                changYear: true,
+                dateFormat: "yy-mm-dd",
+                onSelect: function (startText, endText) {
+                    startText = $("#STime").val();
+                    endText = $("#ETime").val();
+
+                    if (startText > endText) {
+                        alert("起始日期不能大於結束日期");
+                    }
+                }
+            });
+
+            $("#STime").datepicker("setDate", daylastMonth)
+                       .on("change", function () {
+                           $("#STime").valid();
+                       });
+
+
+            $("#ETime").datepicker("setDate", new Date())
+                       .on("change", function () {
+                           $("#ETime").valid();
+                       });
+
+            //當類型選單變化時，連動取得系統別選單
+            $("#TypeList").change(function () {
+                var val = $("#TypeList :selected").val();
+                $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
+                    $("#SysList option").remove();
+                    $.each(data, function (i, opt) {
+                        $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
+                    });
                 });
             });
-        });
 
-        //當復歸類型選單變化時，連動取得系統別選單
-        $("#AckTypeList").change(function () {
-            var val = $("#AckTypeList :selected").val();
-            $.getJSON("@Url.Content("~/AckData/getAckReasonList")", 'a_id=' + val, function (data) {
+            //當復歸類型選單變化時，連動取得系統別選單
+            $("#AckTypeList").change(function () {
+                var val = $("#AckTypeList :selected").val();
+                $.getJSON("@Url.Content("~/AckData/getAckReasonList")", 'a_id=' + val, function (data) {
                     $("#AckReasonList option").remove();
                     $.each(data, function (i, opt) {
                         $("<option></option>").val(opt.id).text(opt.value).appendTo($("#AckReasonList"));
@@ -162,6 +206,14 @@
                 });
             });
 
+            $("#CheckAllcbx").change(function () {
+                if ($("#CheckAllcbx").prop("checked")) {
+                    $(".checkbox").prop("checked", true);
+                }
+                else {
+                    $(".checkbox").prop("checked", false);
+                }
+            });
             //沒有編輯權限時，隱藏欄位
             var canedit = '@Model.caneditMonitProperty';
             if (canedit == 'False') {
@@ -194,20 +246,20 @@
 
                     $.ajax({
                         url: "@Url.Content("~/AckData/Ack")",
-                    type: "POST",
-                    contextType: "text/html; charset=utf-8",
-                    data: { AckList: AckList, AckType: AckType, AckReason: AckReason },
-                    success: function (data) {
-                        $.unblockUI();
-                        alert("復歸成功");
-                    }
-                });
-            }
-            else {
-                alert("請至少選一項目");
-            }
-        });
+                        type: "POST",
+                        contextType: "text/html; charset=utf-8",
+                        data: { AckList: AckList, AckType: AckType, AckReason: AckReason },
+                        success: function (data) {
+                            $.unblockUI();
+                            alert("復歸成功");
+                        }
+                    });
+                }
+                else {
+                    alert("請至少選一項目");
+                }
+            });
 
-    })
+        })
     </script>
 }

@@ -37,9 +37,11 @@ namespace CMD.Controllers
             SF.op_name = op_name;
 
             int currentPage = page < 1 ? 1 : page;
+            DateTime STime = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd") + " 00:00:00");
+            DateTime ETime = Convert.ToDateTime(DateTime.Now.ToString("yyyy/MM/dd") + " 23:59:00");
 
             //初始化回傳物件
-            AckDataViewModel MV = getAckData("-1", "-1", "-1", currentPage);
+            AckDataViewModel MV = getAckData("-1", "-1", "-1","", STime, ETime, currentPage);
             if (MV != null)
             {
                 if (MV ==null || MV.AckData.Count() <= 0)
@@ -68,9 +70,18 @@ namespace CMD.Controllers
             SF.op_name = op_name;
 
             int currentPage = page < 1 ? 1 : page;
+            string nowClass = QMD.nowClass.Trim();
+            string nowType = QMD.nowType.Trim();
+            string nowSys = QMD.nowSys.Replace(" ","");
+            string nowUser = QMD.nowUser.Trim();
+            DateTime STime = QMD.STime;
+            DateTime ETime = QMD.ETime;
+
+            string TmpETime = ETime.ToString("yyyy/MM/dd") + " 23:59:59";
+            ETime = Convert.ToDateTime(TmpETime);
 
             //初始化回傳物件
-            AckDataViewModel MV = getAckData(QMD.nowClass, QMD.nowType, QMD.nowSys, currentPage);
+            AckDataViewModel MV = getAckData(nowClass, nowType, nowSys, nowUser, STime, ETime, currentPage);
 
             if (MV != null)
             {
@@ -222,7 +233,7 @@ namespace CMD.Controllers
             }
         }
 
-        private AckDataViewModel getAckData(string s_class, string s_type, string s_sys, int currentPage)
+        private AckDataViewModel getAckData(string s_class, string s_type, string s_sys,string nowUser,DateTime STime,DateTime ETime, int currentPage)
         {
             AckDataViewModel MV = new AckDataViewModel();
             string op_action = null;
@@ -275,11 +286,24 @@ namespace CMD.Controllers
                         AckDataSysWhereCondition = b => 1 == 1;
                     }
 
+                    Expression<Func<v_ACK_Data, bool>> AckDataUserWhereCondition;
+                    if (nowUser != "")
+                    {
+                        AckDataUserWhereCondition = b => b.系統負責人.Contains(nowUser);
+                    }
+                    else
+                    {
+                        AckDataUserWhereCondition = b => 1 == 1;
+                    }
+
                     var ackdatalist = CMS.v_ACK_Data
                                          .Where(AckDataClassWhereCondition)
                                          .Where(AckDataTypeWhereCondition)
                                          .Where(AckDataSysWhereCondition)
+                                         .Where(AckDataUserWhereCondition)
                                          .Where(b => b.is_ack == false)
+                                         .Where(b => b.異常發生時間 >= STime)
+                                         .Where(b => b.異常發生時間 <= ETime)
                                          .OrderBy(b => b.監控項目編號)
                                          .OrderBy(b => b.監控項目主旨)
                                          .OrderBy(b => b.回報狀態)

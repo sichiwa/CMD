@@ -10,5 +10,8 @@ namespace CMD.Models
         public string nowClass { get; set; }
         public string nowType { get; set; }
         public string nowSys { get; set; }
+        public string nowUser { get; set; }
+        public DateTime STime { get; set; }
+        public DateTime ETime { get; set; }
     }
 }

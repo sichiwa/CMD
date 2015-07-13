@@ -9,7 +9,7 @@ using System.Web.Security;
 namespace CMD.SystemClass
 {
     public class CustomAuthorize : AuthorizeAttribute
-    {        
+    {
         /// <summary>
         /// 功能代號
         /// </summary>
@@ -40,7 +40,12 @@ namespace CMD.SystemClass
             else //if (!filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 // 驗証失敗, redirect to login page
-                filterContext.Result = new HttpUnauthorizedResult();
+                filterContext.Result = new RedirectToRouteResult(
+                                        new RouteValueDictionary 
+                                   {
+                                       { "action", "Index" },
+                                       { "controller", "Login" }
+                                   });
                 //redirect to login page
             }
         }
@@ -51,7 +56,7 @@ namespace CMD.SystemClass
             if (httpContext.Session["UserID"] != null && httpContext.Session["UserRole"] != null)
             {
                 //已登入，所以先檢查是否有Session沒有的話，就從cookie中取出來
-                if (CheckLoginInfo(httpContext)==true)
+                if (CheckLoginInfo(httpContext) == true)
                 {
                     result = true; //檢查是否有權限使用該功能 CheckAuthorization(AppFunctionId));
                 }
@@ -64,8 +69,8 @@ namespace CMD.SystemClass
             bool result = false;
             bool UseCertLogin = Convert.ToBoolean(httpContext.Session["UseCertLogin"].ToString());
             string UserID = httpContext.Session["UserID"].ToString();
-            int UserRole =Convert.ToInt32( httpContext.Session["UserRole"].ToString());
-            int FuncID=-1 ;
+            int UserRole = Convert.ToInt32(httpContext.Session["UserRole"].ToString());
+            int FuncID = -1;
 
             if (f_id != "Home")
             {
@@ -82,7 +87,7 @@ namespace CMD.SystemClass
 
                 if (string.IsNullOrEmpty(httpContext.Session["UserID"].ToString()) == false)
                 {
-                    
+
                     using (CMSEntities CMS = new CMSEntities())
                     {
                         int RoleMappingCount = CMS.RoleFuncMapping
@@ -100,7 +105,7 @@ namespace CMD.SystemClass
             {
                 result = true;
             }
-            
+
             return result;
         }
     }
