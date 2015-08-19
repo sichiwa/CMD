@@ -2,7 +2,7 @@
 <xs:schema id="NLog" targetNamespace="http://www.nlog-project.org/schemas/NLog.xsd" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.nlog-project.org/schemas/NLog.xsd">
   <xs:element name="nlog" type="NLogConfiguration" />
   <xs:complexType name="NLogConfiguration">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="extensions" type="NLogExtensions" />
       <xs:element name="include" type="NLogInclude" />
       <xs:element name="variable" type="NLogVariable" />
@@ -47,7 +47,7 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="NLogTargets">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="default-wrapper" type="WrapperTargetBase" />
       <xs:element name="default-target-parameters" type="Target" />
       <xs:element name="target" type="Target" />
@@ -61,12 +61,12 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="NLogRules">
-    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+    <xs:sequence minOccurs="0" maxOccurs="1000">
       <xs:element name="logger" type="NLogLoggerRule" />
     </xs:sequence>
   </xs:complexType>
   <xs:complexType name="NLogExtensions">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="add" type="NLogExtensionsAdd" />
     </xs:choice>
   </xs:complexType>
@@ -88,7 +88,7 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="NLogLoggerRule">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="filters" type="NLogFilters" />
     </xs:choice>
     <xs:attribute name="name" use="optional">
@@ -128,7 +128,7 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="NLogFilters">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="when" type="when" />
       <xs:element name="whenContains" type="whenContains" />
       <xs:element name="whenEqual" type="whenEqual" />
@@ -188,7 +188,7 @@
   <xs:complexType name="WrapperTargetBase" abstract="true">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="target" type="Target" minOccurs="1" maxOccurs="1" />
           <xs:element name="wrapper-target" type="WrapperTargetBase" minOccurs="1" maxOccurs="1" />
           <xs:element name="compound-target" type="CompoundTargetBase" minOccurs="1" maxOccurs="1" />
@@ -202,8 +202,8 @@
   <xs:complexType name="CompoundTargetBase" abstract="true">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
-          <xs:element name="target" type="Target" minOccurs="1" maxOccurs="unbounded" />
+        <xs:choice minOccurs="0" maxOccurs="1000">
+          <xs:element name="target" type="Target" minOccurs="1" maxOccurs="1000" />
           <xs:element name="wrapper-target" type="WrapperTargetBase" minOccurs="1" maxOccurs="1" />
           <xs:element name="compound-target" type="CompoundTargetBase" minOccurs="1" maxOccurs="1" />
           <xs:element name="target-ref" type="TargetRef" minOccurs="1" maxOccurs="1" />
@@ -229,7 +229,7 @@
   <xs:complexType name="AspNetBufferingWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="bufferGrowLimit" minOccurs="0" maxOccurs="1" type="xs:integer" />
           <xs:element name="bufferSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -261,7 +261,7 @@
   <xs:complexType name="AspNetTrace">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
         </xs:choice>
@@ -281,7 +281,7 @@
   <xs:complexType name="AspResponse">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="addComments" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -307,7 +307,7 @@
   <xs:complexType name="AsyncWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="batchSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
           <xs:element name="overflowAction" minOccurs="0" maxOccurs="1" type="NLog.Targets.Wrappers.AsyncTargetWrapperOverflowAction" />
@@ -352,7 +352,7 @@
   <xs:complexType name="AutoFlushWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
@@ -366,7 +366,7 @@
   <xs:complexType name="BufferingWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="bufferSize" minOccurs="0" maxOccurs="1" type="xs:integer" />
           <xs:element name="flushTimeout" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -398,7 +398,7 @@
   <xs:complexType name="Chainsaw">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -412,7 +412,7 @@
           <xs:element name="includeNLogData" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="includeSourceInfo" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="ndcItemSeparator" minOccurs="0" maxOccurs="1" type="xs:string" />
-          <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.NLogViewerParameterInfo" />
+          <xs:element name="parameter" minOccurs="0" maxOccurs="1000" type="NLog.Targets.NLogViewerParameterInfo" />
           <xs:element name="includeCallSite" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="appInfo" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="includeNdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -514,7 +514,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="NLog.Targets.NLogViewerParameterInfo">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
       <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
     </xs:choice>
@@ -532,14 +532,14 @@
   <xs:complexType name="ColoredConsole">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="header" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="footer" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="useDefaultRowHighlightingRules" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-          <xs:element name="highlight-row" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.ConsoleRowHighlightingRule" />
-          <xs:element name="highlight-word" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.ConsoleWordHighlightingRule" />
+          <xs:element name="highlight-row" minOccurs="0" maxOccurs="1000" type="NLog.Targets.ConsoleRowHighlightingRule" />
+          <xs:element name="highlight-word" minOccurs="0" maxOccurs="1000" type="NLog.Targets.ConsoleWordHighlightingRule" />
           <xs:element name="errorStream" minOccurs="0" maxOccurs="1" type="xs:boolean" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
@@ -597,7 +597,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="NLog.Targets.ConsoleRowHighlightingRule">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="condition" minOccurs="0" maxOccurs="1" type="Condition" />
       <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="NLog.Targets.ConsoleOutputColor" />
       <xs:element name="foregroundColor" minOccurs="0" maxOccurs="1" type="NLog.Targets.ConsoleOutputColor" />
@@ -619,7 +619,7 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="NLog.Targets.ConsoleWordHighlightingRule">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="ignoreCase" minOccurs="0" maxOccurs="1" type="xs:boolean" />
       <xs:element name="regex" minOccurs="0" maxOccurs="1" type="xs:string" />
       <xs:element name="text" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -661,7 +661,7 @@
   <xs:complexType name="Console">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="header" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -699,7 +699,7 @@
   <xs:complexType name="Database">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="connectionString" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="connectionStringName" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -711,11 +711,11 @@
           <xs:element name="keepConnection" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="useTransactions" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="installConnectionString" minOccurs="0" maxOccurs="1" type="Layout" />
-          <xs:element name="install-command" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.DatabaseCommandInfo" />
-          <xs:element name="uninstall-command" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.DatabaseCommandInfo" />
+          <xs:element name="install-command" minOccurs="0" maxOccurs="1000" type="NLog.Targets.DatabaseCommandInfo" />
+          <xs:element name="uninstall-command" minOccurs="0" maxOccurs="1000" type="NLog.Targets.DatabaseCommandInfo" />
           <xs:element name="commandText" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="commandType" minOccurs="0" maxOccurs="1" type="System.Data.CommandType" />
-          <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.DatabaseParameterInfo" />
+          <xs:element name="parameter" minOccurs="0" maxOccurs="1000" type="NLog.Targets.DatabaseParameterInfo" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
           <xs:annotation>
@@ -793,11 +793,11 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="NLog.Targets.DatabaseCommandInfo">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="commandType" minOccurs="0" maxOccurs="1" type="System.Data.CommandType" />
       <xs:element name="connectionString" minOccurs="0" maxOccurs="1" type="Layout" />
       <xs:element name="ignoreFailures" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-      <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.DatabaseParameterInfo" />
+      <xs:element name="parameter" minOccurs="0" maxOccurs="1000" type="NLog.Targets.DatabaseParameterInfo" />
       <xs:element name="text" minOccurs="0" maxOccurs="1" type="Layout" />
     </xs:choice>
     <xs:attribute name="commandType" type="System.Data.CommandType">
@@ -822,7 +822,7 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="NLog.Targets.DatabaseParameterInfo">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
       <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
       <xs:element name="precision" minOccurs="0" maxOccurs="1" type="xs:byte" />
@@ -858,7 +858,7 @@
   <xs:complexType name="Debugger">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="header" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -890,7 +890,7 @@
   <xs:complexType name="Debug">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
         </xs:choice>
@@ -910,7 +910,7 @@
   <xs:complexType name="EventLog">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="category" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -960,7 +960,7 @@
   <xs:complexType name="FallbackGroup">
     <xs:complexContent>
       <xs:extension base="CompoundTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="returnToFirstOnSuccess" minOccurs="0" maxOccurs="1" type="xs:boolean" />
         </xs:choice>
@@ -980,7 +980,7 @@
   <xs:complexType name="File">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="header" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -1209,7 +1209,7 @@
   <xs:complexType name="FilteringWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="condition" minOccurs="0" maxOccurs="1" type="Condition" />
         </xs:choice>
@@ -1229,7 +1229,7 @@
   <xs:complexType name="FormControl">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="append" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -1273,7 +1273,7 @@
   <xs:complexType name="ImpersonatingWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="domain" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="impersonationLevel" minOccurs="0" maxOccurs="1" type="NLog.Targets.Wrappers.SecurityImpersonationLevel" />
@@ -1352,13 +1352,13 @@
   <xs:complexType name="LogReceiverService">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="endpointAddress" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="endpointConfigurationName" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="clientId" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="includeEventProperties" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-          <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
+          <xs:element name="parameter" minOccurs="0" maxOccurs="1000" type="NLog.Targets.MethodCallParameter" />
           <xs:element name="useBinaryEncoding" minOccurs="0" maxOccurs="1" type="xs:boolean" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
@@ -1395,7 +1395,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="NLog.Targets.MethodCallParameter">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
       <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
       <xs:element name="type" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -1419,7 +1419,7 @@
   <xs:complexType name="Mail">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="header" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -1572,7 +1572,7 @@
   <xs:complexType name="Memory">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
         </xs:choice>
@@ -1592,7 +1592,7 @@
   <xs:complexType name="MessageBox">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="caption" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -1618,7 +1618,7 @@
   <xs:complexType name="MSMQ">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -1680,11 +1680,11 @@
   <xs:complexType name="MethodCall">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="className" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="methodName" minOccurs="0" maxOccurs="1" type="xs:string" />
-          <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
+          <xs:element name="parameter" minOccurs="0" maxOccurs="1000" type="NLog.Targets.MethodCallParameter" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
           <xs:annotation>
@@ -1707,7 +1707,7 @@
   <xs:complexType name="Network">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -1775,7 +1775,7 @@
   <xs:complexType name="NLogViewer">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -1789,7 +1789,7 @@
           <xs:element name="includeNLogData" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="includeSourceInfo" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="ndcItemSeparator" minOccurs="0" maxOccurs="1" type="xs:string" />
-          <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.NLogViewerParameterInfo" />
+          <xs:element name="parameter" minOccurs="0" maxOccurs="1000" type="NLog.Targets.NLogViewerParameterInfo" />
           <xs:element name="includeCallSite" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="appInfo" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="includeNdc" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -1886,7 +1886,7 @@
   <xs:complexType name="Null">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="formatMessage" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -1912,7 +1912,7 @@
   <xs:complexType name="OutputDebugString">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
         </xs:choice>
@@ -1932,7 +1932,7 @@
   <xs:complexType name="PerfCounter">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="autoCreate" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="categoryName" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -2014,10 +2014,10 @@
   <xs:complexType name="PostFilteringWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="defaultFilter" minOccurs="0" maxOccurs="1" type="Condition" />
-          <xs:element name="when" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.Wrappers.FilteringRule" />
+          <xs:element name="when" minOccurs="0" maxOccurs="1000" type="NLog.Targets.Wrappers.FilteringRule" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
           <xs:annotation>
@@ -2033,7 +2033,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="NLog.Targets.Wrappers.FilteringRule">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="exists" minOccurs="0" maxOccurs="1" type="Condition" />
       <xs:element name="filter" minOccurs="0" maxOccurs="1" type="Condition" />
     </xs:choice>
@@ -2051,7 +2051,7 @@
   <xs:complexType name="RandomizeGroup">
     <xs:complexContent>
       <xs:extension base="CompoundTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
@@ -2065,7 +2065,7 @@
   <xs:complexType name="RepeatingWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="repeatCount" minOccurs="0" maxOccurs="1" type="xs:integer" />
         </xs:choice>
@@ -2085,7 +2085,7 @@
   <xs:complexType name="RetryingWrapper">
     <xs:complexContent>
       <xs:extension base="WrapperTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="retryCount" minOccurs="0" maxOccurs="1" type="xs:integer" />
           <xs:element name="retryDelayMilliseconds" minOccurs="0" maxOccurs="1" type="xs:integer" />
@@ -2111,7 +2111,7 @@
   <xs:complexType name="RichTextBox">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="autoScroll" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -2122,9 +2122,9 @@
           <xs:element name="showMinimized" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="toolWindow" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="width" minOccurs="0" maxOccurs="1" type="xs:integer" />
-          <xs:element name="row-coloring" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.RichTextBoxRowColoringRule" />
+          <xs:element name="row-coloring" minOccurs="0" maxOccurs="1000" type="NLog.Targets.RichTextBoxRowColoringRule" />
           <xs:element name="useDefaultRowColoringRules" minOccurs="0" maxOccurs="1" type="xs:boolean" />
-          <xs:element name="word-coloring" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.RichTextBoxWordColoringRule" />
+          <xs:element name="word-coloring" minOccurs="0" maxOccurs="1000" type="NLog.Targets.RichTextBoxWordColoringRule" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
           <xs:annotation>
@@ -2194,7 +2194,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="NLog.Targets.RichTextBoxRowColoringRule">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="condition" minOccurs="0" maxOccurs="1" type="Condition" />
       <xs:element name="backgroundColor" minOccurs="0" maxOccurs="1" type="xs:string" />
       <xs:element name="fontColor" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -2222,7 +2222,7 @@
     </xs:attribute>
   </xs:complexType>
   <xs:complexType name="NLog.Targets.RichTextBoxWordColoringRule">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="ignoreCase" minOccurs="0" maxOccurs="1" type="xs:boolean" />
       <xs:element name="regex" minOccurs="0" maxOccurs="1" type="xs:string" />
       <xs:element name="text" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -2270,7 +2270,7 @@
   <xs:complexType name="RoundRobinGroup">
     <xs:complexContent>
       <xs:extension base="CompoundTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
@@ -2284,7 +2284,7 @@
   <xs:complexType name="SplitGroup">
     <xs:complexContent>
       <xs:extension base="CompoundTargetBase">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
         </xs:choice>
         <xs:attribute name="name" type="xs:string">
@@ -2298,7 +2298,7 @@
   <xs:complexType name="Trace">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
         </xs:choice>
@@ -2318,9 +2318,9 @@
   <xs:complexType name="WebService">
     <xs:complexContent>
       <xs:extension base="Target">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
-          <xs:element name="parameter" minOccurs="0" maxOccurs="unbounded" type="NLog.Targets.MethodCallParameter" />
+          <xs:element name="parameter" minOccurs="0" maxOccurs="1000" type="NLog.Targets.MethodCallParameter" />
           <xs:element name="encoding" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="methodName" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="namespace" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -2371,11 +2371,11 @@
   <xs:complexType name="CsvLayout">
     <xs:complexContent>
       <xs:extension base="Layout">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="footer" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="header" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
-          <xs:element name="column" minOccurs="0" maxOccurs="unbounded" type="NLog.Layouts.CsvColumn" />
+          <xs:element name="column" minOccurs="0" maxOccurs="1000" type="NLog.Layouts.CsvColumn" />
           <xs:element name="customColumnDelimiter" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="delimiter" minOccurs="0" maxOccurs="1" type="NLog.Layouts.CsvColumnDelimiterMode" />
           <xs:element name="quoteChar" minOccurs="0" maxOccurs="1" type="xs:string" />
@@ -2444,7 +2444,7 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:complexType name="NLog.Layouts.CsvColumn">
-    <xs:choice minOccurs="0" maxOccurs="unbounded">
+    <xs:choice minOccurs="0" maxOccurs="1000">
       <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
       <xs:element name="name" minOccurs="0" maxOccurs="1" type="xs:string" />
     </xs:choice>
@@ -2462,7 +2462,7 @@
   <xs:complexType name="LayoutWithHeaderAndFooter">
     <xs:complexContent>
       <xs:extension base="Layout">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="footer" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="header" minOccurs="0" maxOccurs="1" type="Layout" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -2488,14 +2488,14 @@
   <xs:complexType name="Log4JXmlEventLayout">
     <xs:complexContent>
       <xs:extension base="Layout">
-        <xs:choice minOccurs="0" maxOccurs="unbounded" />
+        <xs:choice minOccurs="0" maxOccurs="1000" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="SimpleLayout">
     <xs:complexContent>
       <xs:extension base="Layout">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="text" minOccurs="0" maxOccurs="1" type="xs:string" />
         </xs:choice>
         <xs:attribute name="text" type="xs:string">
@@ -2509,7 +2509,7 @@
   <xs:complexType name="when">
     <xs:complexContent>
       <xs:extension base="Filter">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="action" minOccurs="0" maxOccurs="1" type="FilterResult" />
           <xs:element name="condition" minOccurs="0" maxOccurs="1" type="Condition" />
         </xs:choice>
@@ -2538,7 +2538,7 @@
   <xs:complexType name="whenContains">
     <xs:complexContent>
       <xs:extension base="Filter">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="action" minOccurs="0" maxOccurs="1" type="FilterResult" />
           <xs:element name="ignoreCase" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -2570,7 +2570,7 @@
   <xs:complexType name="whenEqual">
     <xs:complexContent>
       <xs:extension base="Filter">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="action" minOccurs="0" maxOccurs="1" type="FilterResult" />
           <xs:element name="compareTo" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="ignoreCase" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -2602,7 +2602,7 @@
   <xs:complexType name="whenNotContains">
     <xs:complexContent>
       <xs:extension base="Filter">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="action" minOccurs="0" maxOccurs="1" type="FilterResult" />
           <xs:element name="ignoreCase" minOccurs="0" maxOccurs="1" type="xs:boolean" />
           <xs:element name="layout" minOccurs="0" maxOccurs="1" type="Layout" />
@@ -2634,7 +2634,7 @@
   <xs:complexType name="whenNotEqual">
     <xs:complexContent>
       <xs:extension base="Filter">
-        <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:choice minOccurs="0" maxOccurs="1000">
           <xs:element name="action" minOccurs="0" maxOccurs="1" type="FilterResult" />
           <xs:element name="compareTo" minOccurs="0" maxOccurs="1" type="xs:string" />
           <xs:element name="ignoreCase" minOccurs="0" maxOccurs="1" type="xs:boolean" />
@@ -2666,28 +2666,28 @@
   <xs:complexType name="AccurateLocal">
     <xs:complexContent>
       <xs:extension base="TimeSource">
-        <xs:choice minOccurs="0" maxOccurs="unbounded" />
+        <xs:choice minOccurs="0" maxOccurs="1000" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="AccurateUTC">
     <xs:complexContent>
       <xs:extension base="TimeSource">
-        <xs:choice minOccurs="0" maxOccurs="unbounded" />
+        <xs:choice minOccurs="0" maxOccurs="1000" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="FastLocal">
     <xs:complexContent>
       <xs:extension base="TimeSource">
-        <xs:choice minOccurs="0" maxOccurs="unbounded" />
+        <xs:choice minOccurs="0" maxOccurs="1000" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:complexType name="FastUTC">
     <xs:complexContent>
       <xs:extension base="TimeSource">
-        <xs:choice minOccurs="0" maxOccurs="unbounded" />
+        <xs:choice minOccurs="0" maxOccurs="1000" />
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>

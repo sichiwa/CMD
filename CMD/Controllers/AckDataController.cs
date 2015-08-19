@@ -60,7 +60,7 @@ namespace CMD.Controllers
         }
 
         [HttpPost]
-        public ActionResult Index(QueryAckData QMD, int page = 1)
+        public ActionResult Index(QueryAckData QMD)
         {
             //初始化系統參數
             Configer.Init();
@@ -69,7 +69,7 @@ namespace CMD.Controllers
             SF.ConnStr = Configer.C_DBConnstring;
             SF.op_name = op_name;
 
-            int currentPage = page < 1 ? 1 : page;
+            int currentPage = QMD.PageIndex < 1 ? 1 : QMD.PageIndex;
             string nowClass = QMD.nowClass.Trim();
             string nowType = QMD.nowType.Trim();
             string nowSys = QMD.nowSys.Replace(" ","");

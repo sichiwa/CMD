@@ -33,14 +33,15 @@
                 @Html.TextBox("nowUser", "", new { Class = "form-control" })
             </div>
             <div class="row form-group">
-                @Html.Label("異常發生時間(開始)", new { Class = "col-md-1 control-label" })
+                @Html.Label("異常開始時間", new { Class = "col-md-1 control-label" })
                 @Html.TextBox("STime", "", new { Class = "form-control date-picker" })
             </div>
             <div class="row form-group">
-                @Html.Label("異常發生時間(結束)", new { Class = "col-md-1 control-label" })
+                @Html.Label("異常結束時間", new { Class = "col-md-1 control-label" })
                 @Html.TextBox("ETime", "", new { Class = "form-control date-picker" })
             </div>
             <div class="row form-group">
+                <input type="hidden" name="PageIndex" id="PageIndex" />
                 <input type="submit" class="col-md-offset-1 col-md-12 btn btn-primary" id="submitbtn" value="查詢" />
             </div>
         }
@@ -124,98 +125,105 @@
 @section ackdatascripts
 {
     <script>
-        $(function () {
-            $("#serachdiv").hide();
-            $("#NeedSearchcbx").change(function () {
-                if ($("#NeedSearchcbx").prop("checked")) {
-                    $("#serachdiv").show();
+    $(function () {
+
+        $('.pagination>li>a[href]').each(function (i, item) {
+            var page = $(item).attr('href').replace('/AckData?Page=', '');
+            $(item).attr('href', '#').click(function () { postPage(page); });
+
+        });
+
+        $("#serachdiv").hide();
+        $("#NeedSearchcbx").change(function () {
+            if ($("#NeedSearchcbx").prop("checked")) {
+                $("#serachdiv").show();
+            }
+            else {
+                $("#serachdiv").hide();
+            }
+        });
+
+        jQuery.validator.setDefaults({
+            debug: false,
+            success: "valid"
+        });
+        var form = $("#queryform");
+        form.validate({
+            errorPlacement: function (label, element) {
+                label.addClass('text-danger');
+                label.insertAfter(element);
+            }
+        });
+
+        $(".date-picker").rules("add", {
+            required: true,
+            date: true,
+            messages: {
+                required: "此欄位為必填欄位",
+                date: "請輸入正確日期格式(yyyy-MM-dd)"
+            }
+        });
+
+        var today = new Date();
+        var daylastMonth = new Date(new Date(today).setMonth(today.getMonth() - 1));
+
+        $(".date-picker").datepicker({
+            changeMonth: true,
+            changYear: true,
+            dateFormat: "yy-mm-dd",
+            onSelect: function (startText, endText) {
+                startText = $("#STime").val();
+                endText = $("#ETime").val();
+
+                if (startText > endText) {
+                    alert("起始日期不能大於結束日期");
                 }
-                else {
-                    $("#serachdiv").hide();
-                }
-            });
+            }
+        });
 
-            jQuery.validator.setDefaults({
-                debug: false,
-                success: "valid"
-            });
-            var form = $("#queryform");
-            form.validate({
-                errorPlacement: function (label, element) {
-                    label.addClass('text-danger');
-                    label.insertAfter(element);
-                }
-            });
-
-            $(".date-picker").rules("add", {
-                required: true,
-                date: true,
-                messages: {
-                    required: "此欄位為必填欄位",
-                    date: "請輸入正確日期格式(yyyy-MM-dd)"
-                }
-            });
-
-            var today = new Date();
-            var daylastMonth = new Date(new Date(today).setMonth(today.getMonth() - 1));
-
-            $(".date-picker").datepicker({
-                changeMonth: true,
-                changYear: true,
-                dateFormat: "yy-mm-dd",
-                onSelect: function (startText, endText) {
-                    startText = $("#STime").val();
-                    endText = $("#ETime").val();
-
-                    if (startText > endText) {
-                        alert("起始日期不能大於結束日期");
-                    }
-                }
-            });
-
-            $("#STime").datepicker("setDate", daylastMonth)
-                       .on("change", function () {
-                           $("#STime").valid();
-                       });
+        $("#STime").datepicker("setDate", daylastMonth)
+                   .on("change", function () {
+                       $("#STime").valid();
+                   });
 
 
-            $("#ETime").datepicker("setDate", new Date())
-                       .on("change", function () {
-                           $("#ETime").valid();
-                       });
+        $("#ETime").datepicker("setDate", new Date())
+                   .on("change", function () {
+                       $("#ETime").valid();
+                   });
 
-            //當類型選單變化時，連動取得系統別選單
-            $("#TypeList").change(function () {
-                var val = $("#TypeList :selected").val();
-                $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
-                    $("#SysList option").remove();
-                    $.each(data, function (i, opt) {
-                        $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
-                    });
+        //當類型選單變化時，連動取得系統別選單
+        $("#TypeList").change(function () {
+            var val = $("#TypeList :selected").val();
+            $.getJSON("@Url.Content("~/MonitorProperty/getSysList")", 't_id=' + val, function (data) {
+                $("#SysList option").remove();
+                $.each(data, function (i, opt) {
+                    $("<option></option>").val(opt.id).text(opt.value).appendTo($("#SysList"));
                 });
             });
+        });
 
-            //當復歸類型選單變化時，連動取得系統別選單
-            $("#AckTypeList").change(function () {
-                var val = $("#AckTypeList :selected").val();
-                $.getJSON("@Url.Content("~/AckData/getAckReasonList")", 'a_id=' + val, function (data) {
-                    $("#AckReasonList option").remove();
-                    $.each(data, function (i, opt) {
-                        $("<option></option>").val(opt.id).text(opt.value).appendTo($("#AckReasonList"));
-                    });
+        //當復歸類型選單變化時，連動取得系統別選單
+        $("#AckTypeList").change(function () {
+            var val = $("#AckTypeList :selected").val();
+            $.getJSON("@Url.Content("~/AckData/getAckReasonList")", 'a_id=' + val, function (data) {
+                $("#AckReasonList option").remove();
+                $.each(data, function (i, opt) {
+                    $("<option></option>").val(opt.id).text(opt.value).appendTo($("#AckReasonList"));
                 });
             });
+        });
 
-            $("#CheckAllcbx").change(function () {
-                if ($("#CheckAllcbx").prop("checked")) {
-                    $(".checkbox").prop("checked", true);
-                }
-                else {
-                    $(".checkbox").prop("checked", false);
-                }
-            });
-            //沒有編輯權限時，隱藏欄位
-            var canedit = '@Model.caneditMonitProperty';
+        $("#CheckAllcbx").change(function () {
+            if ($("#CheckAllcbx").prop("checked")) {
+                $(".checkbox").prop("checked", true);
+            }
+            else {
+                $(".checkbox").prop("checked", false);
+            }
+        });
+        //沒有編輯權限時，隱藏欄位
+        var canedit = '@Model.caneditMonitProperty';
             if (canedit == 'False') {
                 $('td:nth-child(2)').hide();
             }
@@ -241,25 +249,33 @@
 
                 if (AckList != "") {
                     $.blockUI({
-                        message: '<h1><img src="~/pic/busy.gif" /> 正在復歸中，請稍後</h1>'
+                        message: '<h1><img src="@Url.Content("~/pic/busy.gif")" /> 正在復歸中，請稍後</h1>'
                     });
 
                     $.ajax({
                         url: "@Url.Content("~/AckData/Ack")",
-                        type: "POST",
-                        contextType: "text/html; charset=utf-8",
-                        data: { AckList: AckList, AckType: AckType, AckReason: AckReason },
-                        success: function (data) {
-                            $.unblockUI();
-                            alert("復歸成功");
-                        }
-                    });
-                }
-                else {
-                    alert("請至少選一項目");
-                }
-            });
+                    type: "POST",
+                    contextType: "text/html; charset=utf-8",
+                    data: { AckList: AckList, AckType: AckType, AckReason: AckReason },
+                    success: function (data) {
+                        $.unblockUI();
+                        alert("復歸成功");
+                    }
+                });
+            }
+            else {
+                alert("請至少選一項目");
+            }
+        });
 
-        })
+    })
+
+        function postPage(page) {
+            var targetFormId = '#queryform';
+            if ($(targetFormId).size() > 0) {
+                $("#PageIndex").val(page);
+                $(targetFormId).submit();
+            }
+        };
     </script>
 }

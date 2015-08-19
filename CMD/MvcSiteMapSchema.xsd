@@ -12,14 +12,14 @@
 	</xs:annotation>
 
 	<xs:complexType name="mvcSiteMapNodeType">
-		<xs:choice minOccurs="0" maxOccurs="unbounded">
+		<xs:choice minOccurs="0" maxOccurs="1000">
 			<xs:element name="mvcSiteMapNode" type="mvcSiteMapNodeType" />
 		</xs:choice>
 		<xs:attributeGroup ref="urlNodeAttributes" />
 		<xs:attributeGroup ref="providerNodeAttributes" />
 		<xs:attributeGroup ref="fileNodeAttributes" />
 		<xs:attributeGroup ref="frequencyNodeAttributes" />
-		<xs:anyAttribute processContents="skip" />
+		<xs:anyAttribute processContents="strict" />
 	</xs:complexType>
 
 	<xs:complexType name="mvcSiteMapType">
