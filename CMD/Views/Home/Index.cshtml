@@ -74,13 +74,13 @@
                 //加入正式系統資料
                 $.each(ProdbtnInfos, function (i, pbtn) {
                     $("<button></button>").addClass(pbtn.btnClass).text(pbtn.btnText).appendTo($("#prodmonitorviewdiv")).click(function () {
-                        window.location.href = "/MonitorProperty/Index?name=" + pbtn.btnText + "&sclass=0";
+                        window.location.href = "/CMS/MonitorProperty/Index?name=" + pbtn.btnText + "&sclass=0";
                     });
                 });
                 //加入測試系統資料
                 $.each(TestbtnInfos, function (j, tbtn) {
                     $("<button></button>").addClass(tbtn.btnClass).text(tbtn.btnText).appendTo($("#testmonitorviewdiv")).click(function () {
-                        window.location.href = "/MonitorProperty/Index?name=" + tbtn.btnText + "&sclass=1";
+                        window.location.href = "/CMS/MonitorProperty/Index?name=" + tbtn.btnText + "&sclass=1";
                     });
                 });
                 $('.countdown').data('countdown').update(+(new Date) + Schedule).start();
@@ -124,13 +124,13 @@
                             //加入正式系統資料
                             $.each(ProdbtnInfos, function (i, pbtn) {
                                 $("<button></button>").addClass(pbtn.btnClass).text(pbtn.btnText).appendTo($("#prodmonitorviewdiv")).click(function () {
-                                    window.location.href = "/MonitorProperty/Index?name=" + pbtn.btnText + "&sclass=0";
+                                    window.location.href = "/CMS/MonitorProperty/Index?name=" + pbtn.btnText + "&sclass=0";
                                 });
                             })
                             //加入測試系統資料
                             $.each(TestbtnInfos, function (j, tbtn) {
                                 $("<button></button>").addClass(tbtn.btnClass).text(tbtn.btnText).appendTo($("#testmonitorviewdiv")).click(function () {
-                                    window.location.href = "/MonitorProperty/Index?name=" + tbtn.btnText + "&sclass=1";
+                                    window.location.href = "/CMS/MonitorProperty/Index?name=" + tbtn.btnText + "&sclass=1";
                                 });
                             });
                             $('.countdown').data('countdown').update(+(new Date) + Schedule).start();

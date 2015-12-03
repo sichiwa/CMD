@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Net;
 using CMD.SystemClass;
+using System.IO;
 
 namespace CMD.Controllers
 {
@@ -14,6 +15,7 @@ namespace CMD.Controllers
         [CustomAuthorize]   
         public ActionResult Index(string s_class)
         {
+            
             return View();
         }
 

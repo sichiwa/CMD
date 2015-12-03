@@ -509,7 +509,7 @@ namespace CMD.Controllers
 
                 if (SelectResult == "0")
                 {
-                    Result = Convert.ToInt16(ResultDT.Rows[0]["selectMsg"].ToString());
+                    Result = Convert.ToInt32(ResultDT.Rows[0]["selectMsg"].ToString());
                     op_a_count = 1;
                     op_s_count = op_a_count;
                     op_result = true;
@@ -595,7 +595,7 @@ namespace CMD.Controllers
             }
             catch (Exception ex)
             {
-                op_msg = "錯誤訊息:[" + op_msg + "]";
+                op_msg = "錯誤訊息:[" + ex.ToString() + "]";
 
                 SF.logandshowInfo("[" + op_name + "]執行[" + op_action + "]失敗,本次查詢發生異常,請查詢Debug Log得到詳細資訊", log_Info);
                 SF.logandshowInfo("[" + op_name + "]執行[" + op_action + "]失敗,本次查詢發生異常", log_Err);
